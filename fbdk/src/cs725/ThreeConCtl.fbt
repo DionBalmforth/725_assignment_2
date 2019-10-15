@@ -43,6 +43,7 @@
       <VarDeclaration Name="Block" Type="BOOL" />
       <VarDeclaration Name="PE" Type="BOOL" />
       <VarDeclaration Name="PE1" Type="BOOL" />
+      <VarDeclaration Name="PE2" Type="BOOL" />
     </InputVars>
     <OutputVars>
       <VarDeclaration Name="MotoRotate1" Type="BOOL" />
@@ -58,7 +59,6 @@
       <Parameter Name="Candidate" Value="0" />
     </FB>
     <FB Name="FC13" Type="ConveyorCTL" x="2552.9412" y="1894.1176" >
-      <Parameter Name="PE" Value="0" />
       <Parameter Name="Block" Value="0" />
       <Parameter Name="Candidate" Value="0" />
     </FB>
@@ -82,6 +82,7 @@
       <Connection Source="FC11.MotoRotate" Destination="MotoRotate1" dx1="1041.1764" />
       <Connection Source="PE" Destination="FC11.PE" dx1="152.94118" />
       <Connection Source="PE1" Destination="FC12.PE" dx1="152.94118" />
+      <Connection Source="PE2" Destination="FC13.PE" dx1="152.94118" />
       <Connection Source="Block" Destination="FC11.Block" dx1="105.882355" />
       <Connection Source="FC11.BlockCon" Destination="BlockCon" dx1="988.2353" />
       <Connection Source="Candidate" Destination="FC11.Candidate" dx1="41.176468" />

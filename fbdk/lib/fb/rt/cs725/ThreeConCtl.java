@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ThreeConCtl
   * @author JHC
-  * @version 20191014/JHC
+  * @version 20191015/JHC
   */
 public class ThreeConCtl extends FBInstance
 {
@@ -17,6 +17,8 @@ public class ThreeConCtl extends FBInstance
   public BOOL PE = new BOOL();
 /** VAR PE1 */
   public BOOL PE1 = new BOOL();
+/** VAR PE2 */
+  public BOOL PE2 = new BOOL();
 /** VAR MotoRotate1 */
   public BOOL MotoRotate1 = new BOOL();
 /** VAR MotoRotate2 */
@@ -65,6 +67,7 @@ public class ThreeConCtl extends FBInstance
     if("Block".equals(s)) return Block;
     if("PE".equals(s)) return PE;
     if("PE1".equals(s)) return PE1;
+    if("PE2".equals(s)) return PE2;
     return super.ivNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -87,6 +90,7 @@ public class ThreeConCtl extends FBInstance
     else if("Block".equals(ivName)) connect_Block((BOOL)newIV);
     else if("PE".equals(ivName)) connect_PE((BOOL)newIV);
     else if("PE1".equals(ivName)) connect_PE1((BOOL)newIV);
+    else if("PE2".equals(ivName)) connect_PE2((BOOL)newIV);
     else super.connectIV(ivName, newIV);
     }
 /** Connect the given variable to the input variable Candidate
@@ -121,6 +125,14 @@ public class ThreeConCtl extends FBInstance
     PE1 = newIV;
     FC12.connectIVNoException("PE",PE1);
     }
+/** Connect the given variable to the input variable PE2
+  * @param newIV The variable to connect
+  * @throws FBRManagementException An internal connection failed.
+ */
+  public void connect_PE2(BOOL newIV) throws FBRManagementException{
+    PE2 = newIV;
+    FC13.connectIVNoException("PE",PE2);
+    }
 /** FB FC11 */
   protected ConveyorCTL FC11 = new ConveyorCTL() ;
 /** FB FC12 */
@@ -147,12 +159,12 @@ public ThreeConCtl(){
     MotoRotate1 = (BOOL)FC11.ovNamedNoException("MotoRotate");
     FC11.connectIVNoException("PE",PE);
     FC12.connectIVNoException("PE",PE1);
+    FC13.connectIVNoException("PE",PE2);
     FC11.connectIVNoException("Block",Block);
     BlockCon = (BOOL)FC11.ovNamedNoException("BlockCon");
     FC11.connectIVNoException("Candidate",Candidate);
     FC12.Block.initializeNoException("0");
     FC12.Candidate.initializeNoException("0");
-    FC13.PE.initializeNoException("0");
     FC13.Block.initializeNoException("0");
     FC13.Candidate.initializeNoException("0");
   }
