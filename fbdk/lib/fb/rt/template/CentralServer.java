@@ -10,17 +10,17 @@ import fb.rt.events.*;
 public class CentralServer extends FBInstance
 {
 /** Input event qualifier */
-  public BOOL TokIN = new BOOL();
+  public BOOL InToken0 = new BOOL();
 /** Output event qualifier */
-  public BOOL TokOUT = new BOOL();
+  public BOOL OutToken0 = new BOOL();
 /** Initialization Request */
  public EventServer Request0 = new EventInput(this);
 /** dab */
  public EventServer Request1 = new EventInput(this);
-/** EVENT Relinquish0 */
- public EventServer Relinquish0 = new EventInput(this);
-/** EVENT Relinquish1 */
- public EventServer Relinquish1 = new EventInput(this);
+/** EVENT Release0 */
+ public EventServer Release0 = new EventInput(this);
+/** EVENT Release1 */
+ public EventServer Release1 = new EventInput(this);
 /** Initialization Confirm */
  public EventOutput Grant0 = new EventOutput();
 /** Execution Confirmation */
@@ -32,8 +32,8 @@ public class CentralServer extends FBInstance
   public EventServer eiNamed(String s){
     if("Request0".equals(s)) return Request0;
     if("Request1".equals(s)) return Request1;
-    if("Relinquish0".equals(s)) return Relinquish0;
-    if("Relinquish1".equals(s)) return Relinquish1;
+    if("Release0".equals(s)) return Release0;
+    if("Release1".equals(s)) return Release1;
     return super.eiNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -49,7 +49,7 @@ public class CentralServer extends FBInstance
 * @throws FBRManagementException {@inheritDoc}
 */
   public ANY ivNamed(String s) throws FBRManagementException{
-    if("TokIN".equals(s)) return TokIN;
+    if("InToken0".equals(s)) return InToken0;
     return super.ivNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -57,7 +57,7 @@ public class CentralServer extends FBInstance
 * @throws FBRManagementException {@inheritDoc}
 */
   public ANY ovNamed(String s) throws FBRManagementException{
-    if("TokOUT".equals(s)) return TokOUT;
+    if("OutToken0".equals(s)) return OutToken0;
     return super.ovNamed(s);}
 /** {@inheritDoc}
 * @param ivName {@inheritDoc}
@@ -65,32 +65,41 @@ public class CentralServer extends FBInstance
 * @throws FBRManagementException {@inheritDoc} */
   public void connectIV(String ivName, ANY newIV)
     throws FBRManagementException{
-    if("TokIN".equals(ivName)) connect_TokIN((BOOL)newIV);
+    if("InToken0".equals(ivName)) connect_InToken0((BOOL)newIV);
     else super.connectIV(ivName, newIV);
     }
-/** Connect the given variable to the input variable TokIN
+/** Connect the given variable to the input variable InToken0
   * @param newIV The variable to connect
  */
-  public void connect_TokIN(BOOL newIV){
-    TokIN = newIV;
+  public void connect_InToken0(BOOL newIV){
+    InToken0 = newIV;
     }
-private static final int index_START = 0;
-private void state_START(){
-  eccState = index_START;
+private static final int index_NOREQUEST = 0;
+private void state_NOREQUEST(){
+  eccState = index_NOREQUEST;
+  alg_NOREQUEST();
 }
-private static final int index_INIT = 1;
-private void state_INIT(){
-  eccState = index_INIT;
-  alg_INIT();
+private static final int index_GRANT0 = 1;
+private void state_GRANT0(){
+  eccState = index_GRANT0;
+  alg_GRANT0();
   Grant0.serviceEvent(this);
-state_START();
 }
-private static final int index_REQ = 2;
-private void state_REQ(){
-  eccState = index_REQ;
-  alg_REQ();
+private static final int index_GRANT1 = 2;
+private void state_GRANT1(){
+  eccState = index_GRANT1;
+  alg_GRANT1();
   Grant1.serviceEvent(this);
-state_START();
+}
+private static final int index_AWAIT0 = 3;
+private void state_AWAIT0(){
+  eccState = index_AWAIT0;
+  alg_AWAIT0();
+}
+private static final int index_AWAIT1 = 4;
+private void state_AWAIT1(){
+  eccState = index_AWAIT1;
+  alg_AWAIT1();
 }
 /** The default constructor. */
 public CentralServer(){
@@ -101,27 +110,52 @@ public CentralServer(){
   public void serviceEvent(EventServer e){
     if (e == Request0) service_Request0();
     else if (e == Request1) service_Request1();
-    else if (e == Relinquish0) service_Relinquish0();
-    else if (e == Relinquish1) service_Relinquish1();
+    else if (e == Release0) service_Release0();
+    else if (e == Release1) service_Release1();
   }
 /** Services the Request0 event. */
   public void service_Request0(){
-    if ((eccState == index_START)) state_INIT();
+    if ((eccState == index_NOREQUEST)) state_GRANT0();
+    else if ((eccState == index_GRANT1)) state_AWAIT1();
   }
 /** Services the Request1 event. */
   public void service_Request1(){
-    if ((eccState == index_START)) state_REQ();
+    if ((eccState == index_NOREQUEST)) state_GRANT1();
+    else if ((eccState == index_GRANT0)) state_AWAIT0();
   }
-/** Services the Relinquish0 event. */
-  public void service_Relinquish0(){
+/** Services the Release0 event. */
+  public void service_Release0(){
+    if ((eccState == index_GRANT0)) state_NOREQUEST();
+    else if ((eccState == index_AWAIT0)) state_GRANT1();
   }
-/** Services the Relinquish1 event. */
-  public void service_Relinquish1(){
+/** Services the Release1 event. */
+  public void service_Release1(){
+    if ((eccState == index_GRANT1)) state_NOREQUEST();
+    else if ((eccState == index_AWAIT1)) state_GRANT0();
   }
-  /** ALGORITHM INIT IN ST*/
-public void alg_INIT(){
+  /** ALGORITHM GRANT0 IN Java*/
+public void alg_GRANT0(){
+System.out.println("Token Granted to 0");
+
 }
-  /** ALGORITHM REQ IN ST*/
-public void alg_REQ(){
+  /** ALGORITHM GRANT1 IN Java*/
+public void alg_GRANT1(){
+System.out.println("Token Granted to 1");
+
+}
+  /** ALGORITHM NOREQUEST IN Java*/
+public void alg_NOREQUEST(){
+System.out.println("No request");
+
+}
+  /** ALGORITHM AWAIT0 IN Java*/
+public void alg_AWAIT0(){
+System.out.println("Awaiting 0");
+
+}
+  /** ALGORITHM AWAIT1 IN Java*/
+public void alg_AWAIT1(){
+System.out.println("Await 1");
+
 }
 }

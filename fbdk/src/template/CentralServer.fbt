@@ -13,9 +13,9 @@
       </Event>
       <Event Name="Request1" Comment="dab" >
       </Event>
-      <Event Name="Relinquish0" >
+      <Event Name="Release0" >
       </Event>
-      <Event Name="Relinquish1" >
+      <Event Name="Release1" >
       </Event>
     </EventInputs>
     <EventOutputs>
@@ -25,32 +25,52 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Name="TokIN" Type="BOOL" Comment="Input event qualifier" />
+      <VarDeclaration Name="InToken0" Type="BOOL" Comment="Input event qualifier" />
     </InputVars>
     <OutputVars>
-      <VarDeclaration Name="TokOUT" Type="BOOL" Comment="Output event qualifier" />
+      <VarDeclaration Name="OutToken0" Type="BOOL" Comment="Output event qualifier" />
     </OutputVars>
   </InterfaceList>
   <BasicFB>
     <ECC >
-      <ECState Name="START" Comment="Initial State" x="552.9412" y="429.4117" >
+      <ECState Name="NOREQUEST" Comment="Init state" x="3011.7646" y="705.8823" >
+        <ECAction Algorithm="NOREQUEST" />
       </ECState>
-      <ECState Name="INIT" Comment="Initialization" x="923.5294" y="141.1765" >
-        <ECAction Algorithm="INIT" Output="Grant0" />
+      <ECState Name="GRANT0" x="2017.647" y="1500.0" >
+        <ECAction Algorithm="GRANT0" Output="Grant0" />
       </ECState>
-      <ECState Name="REQ" Comment="Normal execution" x="217.647" y="752.9412" >
-        <ECAction Algorithm="REQ" Output="Grant1" />
+      <ECState Name="GRANT1" x="3594.1177" y="1494.1177" >
+        <ECAction Algorithm="GRANT1" Output="Grant1" />
       </ECState>
-      <ECTransition Source="START" Destination="INIT" Condition="Request0" x="923.5294" y="429.4117" />
-      <ECTransition Source="INIT" Destination="START" Condition="1" x="552.9412" y="141.1765" />
-      <ECTransition Source="START" Destination="REQ" Condition="Request1" x="552.9412" y="600.0" />
-      <ECTransition Source="REQ" Destination="START" Condition="1" x="217.647" y="429.4117" />
+      <ECState Name="AWAIT0" x="2976.4705" y="1894.1176" >
+        <ECAction Algorithm="AWAIT0" />
+      </ECState>
+      <ECState Name="AWAIT1" x="2988.2354" y="2252.9412" >
+        <ECAction Algorithm="AWAIT1" />
+      </ECState>
+      <ECTransition Source="NOREQUEST" Destination="GRANT0" Condition="Request0" x="2570.5881" y="1117.6471" />
+      <ECTransition Source="GRANT0" Destination="NOREQUEST" Condition="Release0" x="2017.647" y="1005.8823" />
+      <ECTransition Source="NOREQUEST" Destination="GRANT1" Condition="Request1" x="3435.294" y="1129.4117" />
+      <ECTransition Source="GRANT1" Destination="NOREQUEST" Condition="Release1" x="3935.294" y="1147.0588" />
+      <ECTransition Source="GRANT0" Destination="AWAIT0" Condition="Request1" x="2523.5293" y="1747.0588" />
+      <ECTransition Source="AWAIT0" Destination="GRANT1" Condition="Release0" x="3352.9412" y="1664.7058" />
+      <ECTransition Source="GRANT1" Destination="AWAIT1" Condition="Request0" x="3900.0" y="1894.1176" />
+      <ECTransition Source="AWAIT1" Destination="GRANT0" Condition="Release1" x="2094.1177" y="1864.7058" />
     </ECC>
-  <Algorithm Name="INIT" Comment="Initialization algorithm" >
-    <ST Text="" />
+  <Algorithm Name="GRANT0" Comment="Initialization algorithm" >
+    <Other Language="Java" Text="System.out.println(&#34;Token Granted to 0&#34;);&#10;" />
   </Algorithm>
-  <Algorithm Name="REQ" Comment="Normally executed algorithm" >
-    <ST Text="" />
+  <Algorithm Name="GRANT1" Comment="Initialization algorithm" >
+    <Other Language="Java" Text="System.out.println(&#34;Token Granted to 1&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="NOREQUEST" Comment="Normally executed algorithm" >
+    <Other Language="Java" Text="System.out.println(&#34;No request&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="AWAIT0" Comment="Normally executed algorithm" >
+    <Other Language="Java" Text="System.out.println(&#34;Awaiting 0&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="AWAIT1" Comment="Normally executed algorithm" >
+    <Other Language="Java" Text="System.out.println(&#34;Await 1&#34;);&#10;" />
   </Algorithm>
   </BasicFB>
 </FBType>
