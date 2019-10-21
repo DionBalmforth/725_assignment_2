@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ConveyorCTLServer
   * @author JHC
-  * @version 20191020/JHC
+  * @version 20191021/JHC
   */
 public class ConveyorCTLServer extends FBInstance
 {
@@ -161,6 +161,42 @@ private void state_CAS_STOP(){
   CNF.serviceEvent(this);
 state_START();
 }
+private static final int index_REQUEST = 5;
+private void state_REQUEST(){
+  eccState = index_REQUEST;
+  alg_REQUEST();
+  Request.serviceEvent(this);
+  alg_STOP();
+  STOP.serviceEvent(this);
+  CNF.serviceEvent(this);
+}
+private static final int index_MULTIREQUEST = 6;
+private void state_MULTIREQUEST(){
+  eccState = index_MULTIREQUEST;
+  alg_MULTIREQUEST();
+}
+private static final int index_EXCLUSION = 7;
+private void state_EXCLUSION(){
+  eccState = index_EXCLUSION;
+  alg_START();
+  START.serviceEvent(this);
+  alg_EXCLUSION();
+  CNF.serviceEvent(this);
+}
+private static final int index_MULTIRELEASE = 8;
+private void state_MULTIRELEASE(){
+  eccState = index_MULTIRELEASE;
+  alg_MULTIRELEASE();
+  Release.serviceEvent(this);
+state_REQUEST();
+}
+private static final int index_RELEASE = 9;
+private void state_RELEASE(){
+  eccState = index_RELEASE;
+  alg_RELEASE();
+  Release.serviceEvent(this);
+state_START();
+}
 /** The default constructor. */
 public ConveyorCTLServer(){
     super();
@@ -183,6 +219,10 @@ public ConveyorCTLServer(){
 /** Services the REQ event. */
   public void service_REQ(){
     if ((eccState == index_START) && (Candidate.value)) state_REQ();
+    else if ((eccState == index_START) && (!EnterPE.value)) state_REQUEST();
+    else if ((eccState == index_EXCLUSION) && (EnterPE.value)) state_MULTIREQUEST();
+    else if ((eccState == index_MULTIREQUEST) && (ExitPE.value)) state_MULTIRELEASE();
+    else if ((eccState == index_EXCLUSION) && (ExitPE.value)) state_RELEASE();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
@@ -194,6 +234,7 @@ public ConveyorCTLServer(){
   }
 /** Services the Grant event. */
   public void service_Grant(){
+    if ((eccState == index_REQUEST)) state_EXCLUSION();
   }
   /** ALGORITHM INIT IN ST*/
 public void alg_INIT(){
@@ -246,6 +287,31 @@ MotoRotate.value=false;
 System.out.println(this+" Stop "+MotoRotate.value);
 
 System.out.println("Stop "+MotoRotate.value);
+
+}
+  /** ALGORITHM REQUEST IN Java*/
+public void alg_REQUEST(){
+System.out.println("Entered Request state: " + this);
+
+}
+  /** ALGORITHM EXCLUSION IN Java*/
+public void alg_EXCLUSION(){
+System.out.println("Entered Exclusion state");
+
+}
+  /** ALGORITHM MULTIREQUEST IN Java*/
+public void alg_MULTIREQUEST(){
+System.out.println("Entered Multirequest state");
+
+}
+  /** ALGORITHM MULTIRELEASE IN Java*/
+public void alg_MULTIRELEASE(){
+System.out.println("Entered multirelease state");
+
+}
+  /** ALGORITHM RELEASE IN Java*/
+public void alg_RELEASE(){
+System.out.println("Entered Release state");
 
 }
 }
