@@ -170,12 +170,7 @@ private void state_REQUEST(){
   alg_REQUEST();
   Request.serviceEvent(this);
 }
-private static final int index_MULTIREQUEST = 6;
-private void state_MULTIREQUEST(){
-  eccState = index_MULTIREQUEST;
-  alg_MULTIREQUEST();
-}
-private static final int index_EXCLUSION = 7;
+private static final int index_EXCLUSION = 6;
 private void state_EXCLUSION(){
   eccState = index_EXCLUSION;
   alg_START();
@@ -183,19 +178,30 @@ private void state_EXCLUSION(){
   alg_EXCLUSION();
   CNF.serviceEvent(this);
 }
-private static final int index_MULTIRELEASE = 8;
-private void state_MULTIRELEASE(){
-  eccState = index_MULTIRELEASE;
-  alg_MULTIRELEASE();
-  Release.serviceEvent(this);
-state_REQUEST();
-}
-private static final int index_RELEASE = 9;
+private static final int index_RELEASE = 7;
 private void state_RELEASE(){
   eccState = index_RELEASE;
   alg_RELEASE();
   Release.serviceEvent(this);
 state_START();
+}
+private static final int index_HOLD = 8;
+private void state_HOLD(){
+  eccState = index_HOLD;
+}
+private static final int index_MULTIREQUEST = 9;
+private void state_MULTIREQUEST(){
+  eccState = index_MULTIREQUEST;
+  alg_STOP();
+  STOP.serviceEvent(this);
+  alg_MULTIREQUEST();
+}
+private static final int index_MULTIRELEASE = 10;
+private void state_MULTIRELEASE(){
+  eccState = index_MULTIRELEASE;
+  alg_MULTIRELEASE();
+  Release.serviceEvent(this);
+state_REQUEST();
 }
 /** The default constructor. */
 public ConveyorCTLServer(){
@@ -219,10 +225,11 @@ public ConveyorCTLServer(){
 /** Services the REQ event. */
   public void service_REQ(){
     if ((eccState == index_START) && (Candidate.value)) state_REQ();
-    else if ((eccState == index_EXCLUSION) && (!EnterPE.value)) state_MULTIREQUEST();
-    else if ((eccState == index_MULTIREQUEST) && (!ExitPE.value)) state_MULTIRELEASE();
-    else if ((eccState == index_EXCLUSION) && (!ExitPE.value)) state_RELEASE();
+    else if ((eccState == index_HOLD) && (!ExitPE.value)) state_RELEASE();
     else if ((eccState == index_START) && (!EnterPE.value)) state_REQUEST();
+    else if ((eccState == index_EXCLUSION) && (EnterPE.value)) state_HOLD();
+    else if ((eccState == index_HOLD) && (!EnterPE.value)) state_MULTIREQUEST();
+    else if ((eccState == index_MULTIREQUEST) && (!ExitPE.value)) state_MULTIRELEASE();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
