@@ -78,13 +78,13 @@
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="REQUEST" x="2994.1177" y="958.8235" >
-        <ECAction Algorithm="REQUEST" Output="Request" />
+      <ECState Name="REQUEST" x="2994.1177" y="976.4706" >
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="CNF" />
+        <ECAction Algorithm="REQUEST" Output="Request" />
       </ECState>
       <ECState Name="MULTIREQUEST" x="1747.0588" y="2000.0" >
-        <ECAction Algorithm="MULTIREQUEST" />
+        <ECAction Algorithm="MULTIREQUEST" Output="Request" />
       </ECState>
       <ECState Name="EXCLUSION" x="2994.1177" y="1582.3529" >
         <ECAction Algorithm="START" Output="START" />
@@ -104,13 +104,13 @@
       <ECTransition Source="CAS_START" Destination="START" Condition="1" x="823.5294" y="1070.5883" />
       <ECTransition Source="START" Destination="CAS_STOP" Condition="CAS_STOP" x="2223.5293" y="241.17647" />
       <ECTransition Source="CAS_STOP" Destination="START" Condition="1" x="2223.5293" y="470.58823" />
-      <ECTransition Source="START" Destination="REQUEST" Condition="REQ&#38;!EnterPE" x="2364.7058" y="811.7647" />
-      <ECTransition Source="REQUEST" Destination="EXCLUSION" Condition="Grant" x="2994.1177" y="1341.1764" />
-      <ECTransition Source="EXCLUSION" Destination="MULTIREQUEST" Condition="REQ&#38;EnterPE" x="2394.1177" y="1782.3529" />
-      <ECTransition Source="MULTIREQUEST" Destination="MULTIRELEASE" Condition="REQ&#38;ExitPE" x="1747.0588" y="1705.8823" />
-      <ECTransition Source="MULTIRELEASE" Destination="REQUEST" Condition="1" x="1747.0588" y="958.8235" />
-      <ECTransition Source="EXCLUSION" Destination="RELEASE" Condition="REQ&#38;ExitPE" x="2994.1177" y="2335.2942" />
+      <ECTransition Source="REQUEST" Destination="EXCLUSION" Condition="Grant" x="2994.1177" y="1358.8235" />
+      <ECTransition Source="EXCLUSION" Destination="MULTIREQUEST" Condition="REQ&#38;!EnterPE" x="2394.1177" y="1782.3529" />
+      <ECTransition Source="MULTIREQUEST" Destination="MULTIRELEASE" Condition="REQ&#38;!ExitPE" x="1747.0588" y="1705.8823" />
+      <ECTransition Source="MULTIRELEASE" Destination="REQUEST" Condition="1" x="1747.0588" y="976.4706" />
+      <ECTransition Source="EXCLUSION" Destination="RELEASE" Condition="REQ&#38;!ExitPE" x="2994.1177" y="2335.2942" />
       <ECTransition Source="RELEASE" Destination="START" Condition="1" x="1394.1177" y="2335.2942" />
+      <ECTransition Source="START" Destination="REQUEST" Condition="REQ&#38;!EnterPE" x="2994.1177" y="617.64703" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />

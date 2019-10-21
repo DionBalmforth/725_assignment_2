@@ -164,16 +164,17 @@ state_START();
 private static final int index_REQUEST = 5;
 private void state_REQUEST(){
   eccState = index_REQUEST;
-  alg_REQUEST();
-  Request.serviceEvent(this);
   alg_STOP();
   STOP.serviceEvent(this);
   CNF.serviceEvent(this);
+  alg_REQUEST();
+  Request.serviceEvent(this);
 }
 private static final int index_MULTIREQUEST = 6;
 private void state_MULTIREQUEST(){
   eccState = index_MULTIREQUEST;
   alg_MULTIREQUEST();
+  Request.serviceEvent(this);
 }
 private static final int index_EXCLUSION = 7;
 private void state_EXCLUSION(){
@@ -219,10 +220,10 @@ public ConveyorCTLServer(){
 /** Services the REQ event. */
   public void service_REQ(){
     if ((eccState == index_START) && (Candidate.value)) state_REQ();
+    else if ((eccState == index_EXCLUSION) && (!EnterPE.value)) state_MULTIREQUEST();
+    else if ((eccState == index_MULTIREQUEST) && (!ExitPE.value)) state_MULTIRELEASE();
+    else if ((eccState == index_EXCLUSION) && (!ExitPE.value)) state_RELEASE();
     else if ((eccState == index_START) && (!EnterPE.value)) state_REQUEST();
-    else if ((eccState == index_EXCLUSION) && (EnterPE.value)) state_MULTIREQUEST();
-    else if ((eccState == index_MULTIREQUEST) && (ExitPE.value)) state_MULTIRELEASE();
-    else if ((eccState == index_EXCLUSION) && (ExitPE.value)) state_RELEASE();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){

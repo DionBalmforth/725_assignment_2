@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK TwoConCtlServer
   * @author JHC
-  * @version 20191020/JHC
+  * @version 20191021/JHC
   */
 public class TwoConCtlServer extends FBInstance
 {
@@ -138,9 +138,12 @@ public TwoConCtlServer(){
     REQ.connectTo(FC11.REQ);
     FC12.INITO.connectTo(INITO);
     FC12.CNF.connectTo(CNF);
+    FC12.Request.connectTo(Request);
+    FC12.Release.connectTo(Release);
     REQ.connectTo(FC12.REQ);
     STOP.connectTo(FC12.CAS_STOP);
     START.connectTo(FC12.CAS_START);
+    Grant.connectTo(FC12.Grant);
     FC12.STOP.connectTo(FC11.CAS_STOP);
     FC12.START.connectTo(FC11.CAS_START);
     FC11.INITO.connectTo(FC12.INIT);

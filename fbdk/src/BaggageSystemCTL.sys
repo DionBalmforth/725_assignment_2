@@ -212,7 +212,7 @@
           <Parameter Name="Candidate" Value="0" />
           <Parameter Name="Block" Value="0" />
         </FB>
-        <FB Name="Server" Type="CentralServer" x="3058.8235" y="364.70587" />
+        <FB Name="Server" Type="CentralServer" x="3005.8823" y="317.64706" />
         <EventConnections>
           <Connection Source="START.COLD" Destination="BagInOne.INIT" dx1="29.411764" dx2="20.0" dy="-60.0" />
           <Connection Source="BagInThree.IND" Destination="BagIn3.REQ" dx1="58.82353" />
@@ -250,6 +250,11 @@
           <Connection Source="FCFour.INITO" Destination="TCOne.INIT" dx1="247.05882" />
           <Connection Source="TCOne.INITO" Destination="ConControl.INIT" dx1="776.4706" />
           <Connection Source="FCOne.Request" Destination="Server.Request0" dx1="29.411764" />
+          <Connection Source="FCOne.Release" Destination="Server.Release0" dx1="29.411764" />
+          <Connection Source="Server.Grant0" Destination="FCOne.Grant" dx1="29.411764" dx2="200.0" dy="-370.58823" />
+          <Connection Source="FCThree.Request" Destination="Server.Request1" dx1="29.411764" dx2="70.588234" dy="-370.58823" />
+          <Connection Source="FCThree.Release" Destination="Server.Release1" dx1="29.411764" />
+          <Connection Source="Server.Grant1" Destination="FCThree.Grant" dx1="29.411764" dx2="200.0" dy="-370.58823" />
         </EventConnections>
         <DataConnections>
           <Connection Source="FCTwo.BlockCon" Destination="TCOne.Block" dx1="264.70587" />
