@@ -84,7 +84,7 @@
         <ECAction Algorithm="REQUEST" Output="Request" />
       </ECState>
       <ECState Name="MULTIREQUEST" x="1747.0588" y="2000.0" >
-        <ECAction Algorithm="MULTIREQUEST" Output="Request" />
+        <ECAction Algorithm="MULTIREQUEST" />
       </ECState>
       <ECState Name="EXCLUSION" x="2994.1177" y="1582.3529" >
         <ECAction Algorithm="START" Output="START" />

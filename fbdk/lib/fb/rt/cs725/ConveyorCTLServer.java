@@ -174,7 +174,6 @@ private static final int index_MULTIREQUEST = 6;
 private void state_MULTIREQUEST(){
   eccState = index_MULTIREQUEST;
   alg_MULTIREQUEST();
-  Request.serviceEvent(this);
 }
 private static final int index_EXCLUSION = 7;
 private void state_EXCLUSION(){
