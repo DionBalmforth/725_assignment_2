@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ThreeConCtl
   * @author JHC
-  * @version 20191015/JHC
+  * @version 20191022/JHC
   */
 public class ThreeConCtl extends FBInstance
 {
