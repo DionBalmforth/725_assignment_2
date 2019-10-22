@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ConveyorCTLServer
   * @author JHC
-  * @version 20191021/JHC
+  * @version 20191022/JHC
   */
 public class ConveyorCTLServer extends FBInstance
 {
@@ -203,6 +203,14 @@ private void state_MULTIRELEASE(){
   Release.serviceEvent(this);
 state_REQUEST();
 }
+private static final int index_RELEASEINTERMEDIATE = 11;
+private void state_RELEASEINTERMEDIATE(){
+  eccState = index_RELEASEINTERMEDIATE;
+}
+private static final int index_MULTIREQUESTINTERMEDIATE = 12;
+private void state_MULTIREQUESTINTERMEDIATE(){
+  eccState = index_MULTIREQUESTINTERMEDIATE;
+}
 /** The default constructor. */
 public ConveyorCTLServer(){
     super();
@@ -225,11 +233,13 @@ public ConveyorCTLServer(){
 /** Services the REQ event. */
   public void service_REQ(){
     if ((eccState == index_START) && (Candidate.value)) state_REQ();
-    else if ((eccState == index_HOLD) && (!ExitPE.value)) state_RELEASE();
+    else if ((eccState == index_HOLD) && (!ExitPE.value)) state_RELEASEINTERMEDIATE();
     else if ((eccState == index_START) && (!EnterPE.value)) state_REQUEST();
     else if ((eccState == index_EXCLUSION) && (EnterPE.value)) state_HOLD();
     else if ((eccState == index_HOLD) && (!EnterPE.value)) state_MULTIREQUEST();
-    else if ((eccState == index_MULTIREQUEST) && (!ExitPE.value)) state_MULTIRELEASE();
+    else if ((eccState == index_MULTIREQUEST) && (!ExitPE.value)) state_MULTIREQUESTINTERMEDIATE();
+    else if ((eccState == index_RELEASEINTERMEDIATE) && (ExitPE.value)) state_RELEASE();
+    else if ((eccState == index_MULTIREQUESTINTERMEDIATE) && (ExitPE.value)) state_MULTIRELEASE();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
