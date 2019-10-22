@@ -3,20 +3,18 @@ package fb.rt.cs725;
 import fb.datatype.*;
 import fb.rt.*;
 import fb.rt.events.*;
-/** FUNCTION_BLOCK ConveyorCTLServer
+/** FUNCTION_BLOCK ConveyorCTLServerBack
   * @author JHC
   * @version 20191022/JHC
   */
-public class ConveyorCTLServer extends FBInstance
+public class ConveyorCTLServerBack extends FBInstance
 {
 /** Input event qualifier */
-  public BOOL EnterPE = new BOOL();
+  public BOOL PE = new BOOL();
 /** VAR Block */
   public BOOL Block = new BOOL();
 /** VAR Candidate */
   public BOOL Candidate = new BOOL();
-/** VAR ExitPE */
-  public BOOL ExitPE = new BOOL();
 /** Output event qualifier */
   public BOOL MotoRotate = new BOOL();
 /** VAR BlockCon */
@@ -43,10 +41,8 @@ public class ConveyorCTLServer extends FBInstance
  public EventOutput STOP = new EventOutput();
 /** EVENT START */
  public EventOutput START = new EventOutput();
-/** EVENT Request */
- public EventOutput Request = new EventOutput();
-/** EVENT Release */
- public EventOutput Release = new EventOutput();
+/** EVENT CAS_GRANT */
+ public EventOutput CAS_GRANT = new EventOutput();
 /** {@inheritDoc}
 * @param s {@inheritDoc}
 * @return {@inheritDoc}
@@ -67,8 +63,7 @@ public class ConveyorCTLServer extends FBInstance
     if("CNF".equals(s)) return CNF;
     if("STOP".equals(s)) return STOP;
     if("START".equals(s)) return START;
-    if("Request".equals(s)) return Request;
-    if("Release".equals(s)) return Release;
+    if("CAS_GRANT".equals(s)) return CAS_GRANT;
     return super.eoNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -76,10 +71,9 @@ public class ConveyorCTLServer extends FBInstance
 * @throws FBRManagementException {@inheritDoc}
 */
   public ANY ivNamed(String s) throws FBRManagementException{
-    if("EnterPE".equals(s)) return EnterPE;
+    if("PE".equals(s)) return PE;
     if("Block".equals(s)) return Block;
     if("Candidate".equals(s)) return Candidate;
-    if("ExitPE".equals(s)) return ExitPE;
     return super.ivNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -96,17 +90,16 @@ public class ConveyorCTLServer extends FBInstance
 * @throws FBRManagementException {@inheritDoc} */
   public void connectIV(String ivName, ANY newIV)
     throws FBRManagementException{
-    if("EnterPE".equals(ivName)) connect_EnterPE((BOOL)newIV);
+    if("PE".equals(ivName)) connect_PE((BOOL)newIV);
     else if("Block".equals(ivName)) connect_Block((BOOL)newIV);
     else if("Candidate".equals(ivName)) connect_Candidate((BOOL)newIV);
-    else if("ExitPE".equals(ivName)) connect_ExitPE((BOOL)newIV);
     else super.connectIV(ivName, newIV);
     }
-/** Connect the given variable to the input variable EnterPE
+/** Connect the given variable to the input variable PE
   * @param newIV The variable to connect
  */
-  public void connect_EnterPE(BOOL newIV){
-    EnterPE = newIV;
+  public void connect_PE(BOOL newIV){
+    PE = newIV;
     }
 /** Connect the given variable to the input variable Block
   * @param newIV The variable to connect
@@ -119,12 +112,6 @@ public class ConveyorCTLServer extends FBInstance
  */
   public void connect_Candidate(BOOL newIV){
     Candidate = newIV;
-    }
-/** Connect the given variable to the input variable ExitPE
-  * @param newIV The variable to connect
- */
-  public void connect_ExitPE(BOOL newIV){
-    ExitPE = newIV;
     }
 private static final int index_START = 0;
 private void state_START(){
@@ -161,58 +148,17 @@ private void state_CAS_STOP(){
   CNF.serviceEvent(this);
 state_START();
 }
-private static final int index_REQUEST = 5;
-private void state_REQUEST(){
-  eccState = index_REQUEST;
-  alg_STOP();
-  STOP.serviceEvent(this);
-  CNF.serviceEvent(this);
-  alg_REQUEST();
-  Request.serviceEvent(this);
-}
-private static final int index_EXCLUSION = 6;
-private void state_EXCLUSION(){
-  eccState = index_EXCLUSION;
+private static final int index_CAS_GRANT = 5;
+private void state_CAS_GRANT(){
+  eccState = index_CAS_GRANT;
+  CAS_GRANT.serviceEvent(this);
   alg_START();
   START.serviceEvent(this);
-  alg_EXCLUSION();
   CNF.serviceEvent(this);
-}
-private static final int index_RELEASE = 7;
-private void state_RELEASE(){
-  eccState = index_RELEASE;
-  alg_RELEASE();
-  Release.serviceEvent(this);
 state_START();
 }
-private static final int index_HOLD = 8;
-private void state_HOLD(){
-  eccState = index_HOLD;
-}
-private static final int index_MULTIREQUEST = 9;
-private void state_MULTIREQUEST(){
-  eccState = index_MULTIREQUEST;
-  alg_STOP();
-  STOP.serviceEvent(this);
-  alg_MULTIREQUEST();
-}
-private static final int index_MULTIRELEASE = 10;
-private void state_MULTIRELEASE(){
-  eccState = index_MULTIRELEASE;
-  alg_MULTIRELEASE();
-  Release.serviceEvent(this);
-state_REQUEST();
-}
-private static final int index_RELEASEINTERMEDIATE = 11;
-private void state_RELEASEINTERMEDIATE(){
-  eccState = index_RELEASEINTERMEDIATE;
-}
-private static final int index_MULTIREQUESTINTERMEDIATE = 12;
-private void state_MULTIREQUESTINTERMEDIATE(){
-  eccState = index_MULTIREQUESTINTERMEDIATE;
-}
 /** The default constructor. */
-public ConveyorCTLServer(){
+public ConveyorCTLServerBack(){
     super();
     lastPE.initializeNoException("1");
     lastBlock.initializeNoException("0");
@@ -233,13 +179,6 @@ public ConveyorCTLServer(){
 /** Services the REQ event. */
   public void service_REQ(){
     if ((eccState == index_START) && (Candidate.value)) state_REQ();
-    else if ((eccState == index_HOLD) && (!ExitPE.value)) state_RELEASEINTERMEDIATE();
-    else if ((eccState == index_START) && (!EnterPE.value)) state_REQUEST();
-    else if ((eccState == index_EXCLUSION) && (EnterPE.value)) state_HOLD();
-    else if ((eccState == index_HOLD) && (!EnterPE.value)) state_MULTIREQUEST();
-    else if ((eccState == index_MULTIREQUEST) && (!ExitPE.value)) state_MULTIREQUESTINTERMEDIATE();
-    else if ((eccState == index_RELEASEINTERMEDIATE) && (ExitPE.value)) state_RELEASE();
-    else if ((eccState == index_MULTIREQUESTINTERMEDIATE) && (ExitPE.value)) state_MULTIRELEASE();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
@@ -251,7 +190,7 @@ public ConveyorCTLServer(){
   }
 /** Services the Grant event. */
   public void service_Grant(){
-    if ((eccState == index_REQUEST)) state_EXCLUSION();
+    if ((eccState == index_START)) state_CAS_GRANT();
   }
   /** ALGORITHM INIT IN ST*/
 public void alg_INIT(){
@@ -265,8 +204,8 @@ System.out.println(MotoRotate.value);
 public void alg_REQ(){
 System.out.println(this+" -> Candidate"+Candidate.value);
 if(Candidate.value){
-if(lastPE.value!=EnterPE.value){
-if(!EnterPE.value){
+if(lastPE.value!=PE.value){
+if(!PE.value){
 BlockCon.value=true;
 System.out.println("BlockCon = true");
 }
@@ -274,7 +213,7 @@ else{
 BlockCon.value=false;
 System.out.println("BlockCon = false");
 }
-lastPE.value=EnterPE.value;
+lastPE.value=PE.value;
 }
 if(lastBlock.value!=Block.value){
 if(Block.value){
@@ -298,37 +237,11 @@ System.out.println(this+" Start "+MotoRotate.value);
 
 System.out.println("Start "+MotoRotate.value);
 }
-  /** ALGORITHM STOP IN Java*/
+  /** ALGORITHM STOP IN ST*/
 public void alg_STOP(){
 MotoRotate.value=false;
 System.out.println(this+" Stop "+MotoRotate.value);
 
 System.out.println("Stop "+MotoRotate.value);
-
-}
-  /** ALGORITHM REQUEST IN Java*/
-public void alg_REQUEST(){
-System.out.println("Entered Request state: " + this);
-
-}
-  /** ALGORITHM EXCLUSION IN Java*/
-public void alg_EXCLUSION(){
-System.out.println("Entered Exclusion state");
-
-}
-  /** ALGORITHM MULTIREQUEST IN Java*/
-public void alg_MULTIREQUEST(){
-System.out.println("Entered Multirequest state");
-
-}
-  /** ALGORITHM MULTIRELEASE IN Java*/
-public void alg_MULTIRELEASE(){
-System.out.println("Entered multirelease state");
-
-}
-  /** ALGORITHM RELEASE IN Java*/
-public void alg_RELEASE(){
-System.out.println("Entered Release state");
-
 }
 }
