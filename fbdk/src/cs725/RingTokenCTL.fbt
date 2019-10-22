@@ -82,6 +82,7 @@
         <ECAction Algorithm="STOP" />
       </ECState>
       <ECState Name="TOKENFUL" x="1772.2222" y="1694.4443" >
+        <ECAction Algorithm="TOKEN_IN_USE" Output="TokenStatus_Output" />
       </ECState>
       <ECState Name="CRITICAL_SECTION" Comment="Entering the critical section" x="1583.3333" y="2744.4443" >
         <ECAction Algorithm="START" Output="CNF" />

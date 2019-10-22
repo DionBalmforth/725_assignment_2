@@ -150,6 +150,8 @@ private void state_WAIT(){
 private static final int index_TOKENFUL = 3;
 private void state_TOKENFUL(){
   eccState = index_TOKENFUL;
+  alg_TOKEN_IN_USE();
+  TokenStatus_Output.serviceEvent(this);
 }
 private static final int index_CRITICAL_SECTION = 4;
 private void state_CRITICAL_SECTION(){
