@@ -15,6 +15,8 @@ public class ConveyorCTLMulti extends FBInstance
   public BOOL Block = new BOOL();
 /** VAR Candidate */
   public BOOL Candidate = new BOOL();
+/** VAR PE14 */
+  public BOOL PE14 = new BOOL();
 /** Output event qualifier */
   public BOOL MotoRotate = new BOOL();
 /** VAR BlockCon */
@@ -31,6 +33,10 @@ public class ConveyorCTLMulti extends FBInstance
  public EventServer CAS_STOP = new EventInput(this);
 /** EVENT CAS_START */
  public EventServer CAS_START = new EventInput(this);
+/** EVENT REPLY_IN */
+ public EventServer REPLY_IN = new EventInput(this);
+/** EVENT REQUEST_IN */
+ public EventServer REQUEST_IN = new EventInput(this);
 /** Initialization Confirm */
  public EventOutput INITO = new EventOutput();
 /** Execution Confirmation */
@@ -39,6 +45,10 @@ public class ConveyorCTLMulti extends FBInstance
  public EventOutput STOP = new EventOutput();
 /** EVENT START */
  public EventOutput START = new EventOutput();
+/** EVENT REPLY_OUT */
+ public EventOutput REPLY_OUT = new EventOutput();
+/** EVENT REQUEST_OUT */
+ public EventOutput REQUEST_OUT = new EventOutput();
 /** {@inheritDoc}
 * @param s {@inheritDoc}
 * @return {@inheritDoc}
@@ -48,6 +58,8 @@ public class ConveyorCTLMulti extends FBInstance
     if("REQ".equals(s)) return REQ;
     if("CAS_STOP".equals(s)) return CAS_STOP;
     if("CAS_START".equals(s)) return CAS_START;
+    if("REPLY_IN".equals(s)) return REPLY_IN;
+    if("REQUEST_IN".equals(s)) return REQUEST_IN;
     return super.eiNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -58,6 +70,8 @@ public class ConveyorCTLMulti extends FBInstance
     if("CNF".equals(s)) return CNF;
     if("STOP".equals(s)) return STOP;
     if("START".equals(s)) return START;
+    if("REPLY_OUT".equals(s)) return REPLY_OUT;
+    if("REQUEST_OUT".equals(s)) return REQUEST_OUT;
     return super.eoNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -68,6 +82,7 @@ public class ConveyorCTLMulti extends FBInstance
     if("PE".equals(s)) return PE;
     if("Block".equals(s)) return Block;
     if("Candidate".equals(s)) return Candidate;
+    if("PE14".equals(s)) return PE14;
     return super.ivNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -87,6 +102,7 @@ public class ConveyorCTLMulti extends FBInstance
     if("PE".equals(ivName)) connect_PE((BOOL)newIV);
     else if("Block".equals(ivName)) connect_Block((BOOL)newIV);
     else if("Candidate".equals(ivName)) connect_Candidate((BOOL)newIV);
+    else if("PE14".equals(ivName)) connect_PE14((BOOL)newIV);
     else super.connectIV(ivName, newIV);
     }
 /** Connect the given variable to the input variable PE
@@ -107,6 +123,12 @@ public class ConveyorCTLMulti extends FBInstance
   public void connect_Candidate(BOOL newIV){
     Candidate = newIV;
     }
+/** Connect the given variable to the input variable PE14
+  * @param newIV The variable to connect
+ */
+  public void connect_PE14(BOOL newIV){
+    PE14 = newIV;
+    }
 private static final int index_START = 0;
 private void state_START(){
   eccState = index_START;
@@ -126,21 +148,24 @@ private void state_REQ(){
   CNF.serviceEvent(this);
 state_START();
 }
-private static final int index_CAS_START = 3;
-private void state_CAS_START(){
-  eccState = index_CAS_START;
-  alg_START();
-  START.serviceEvent(this);
-  CNF.serviceEvent(this);
+private static final int index_SEND = 3;
+private void state_SEND(){
+  eccState = index_SEND;
+  REPLY_OUT.serviceEvent(this);
 state_START();
 }
-private static final int index_CAS_STOP = 4;
-private void state_CAS_STOP(){
-  eccState = index_CAS_STOP;
+private static final int index_WANTED = 4;
+private void state_WANTED(){
+  eccState = index_WANTED;
+  REQUEST_OUT.serviceEvent(this);
   alg_STOP();
   STOP.serviceEvent(this);
-  CNF.serviceEvent(this);
-state_START();
+}
+private static final int index_HELD = 5;
+private void state_HELD(){
+  eccState = index_HELD;
+  alg_START();
+  START.serviceEvent(this);
 }
 /** The default constructor. */
 public ConveyorCTLMulti(){
@@ -155,6 +180,8 @@ public ConveyorCTLMulti(){
     else if (e == REQ) service_REQ();
     else if (e == CAS_STOP) service_CAS_STOP();
     else if (e == CAS_START) service_CAS_START();
+    else if (e == REPLY_IN) service_REPLY_IN();
+    else if (e == REQUEST_IN) service_REQUEST_IN();
   }
 /** Services the INIT event. */
   public void service_INIT(){
@@ -163,14 +190,22 @@ public ConveyorCTLMulti(){
 /** Services the REQ event. */
   public void service_REQ(){
     if ((eccState == index_START) && (Candidate.value)) state_REQ();
+    else if ((eccState == index_START) && (!PE.value)) state_WANTED();
+    else if ((eccState == index_HELD) && (!PE14.value)) state_START();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
-    if ((eccState == index_START)) state_CAS_STOP();
   }
 /** Services the CAS_START event. */
   public void service_CAS_START(){
-    if ((eccState == index_START)) state_CAS_START();
+  }
+/** Services the REPLY_IN event. */
+  public void service_REPLY_IN(){
+    if ((eccState == index_WANTED)) state_HELD();
+  }
+/** Services the REQUEST_IN event. */
+  public void service_REQUEST_IN(){
+    if ((eccState == index_START)) state_SEND();
   }
   /** ALGORITHM INIT IN ST*/
 public void alg_INIT(){

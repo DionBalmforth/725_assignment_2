@@ -19,6 +19,10 @@
         <With Var="Candidate" />
         <With Var="PE" />
       </Event>
+      <Event Name="REPLY_IN" >
+      </Event>
+      <Event Name="REQUEST_IN" >
+      </Event>
     </EventInputs>
     <EventOutputs>
       <Event Name="INITO" Comment="Initialization Confirm" >
@@ -37,6 +41,10 @@
       </Event>
       <Event Name="STOP" >
       </Event>
+      <Event Name="REPLY_OUT" >
+      </Event>
+      <Event Name="REQUEST_OUT" >
+      </Event>
     </EventOutputs>
     <InputVars>
       <VarDeclaration Name="Candidate" Type="BOOL" />
@@ -44,6 +52,7 @@
       <VarDeclaration Name="PE" Type="BOOL" />
       <VarDeclaration Name="PE1" Type="BOOL" />
       <VarDeclaration Name="PE2" Type="BOOL" />
+      <VarDeclaration Name="PE14" Type="BOOL" />
     </InputVars>
     <OutputVars>
       <VarDeclaration Name="MotoRotate1" Type="BOOL" />
@@ -74,11 +83,15 @@
       <Connection Source="REQ" Destination="FC12.REQ" dx1="1244.4443" />
       <Connection Source="REQ" Destination="FC13.REQ" dx1="2444.4443" />
       <Connection Source="FC11.CNF" Destination="CNF" dx1="922.22217" />
-      <Connection Source="FC12.CNF" Destination="CNF" dx1="2044.4443" />
+      <Connection Source="FC12.CNF" Destination="CNF" dx1="2305.5554" />
+      <Connection Source="REPLY_IN" Destination="FC12.REPLY_IN" dx1="1166.6666" />
+      <Connection Source="REQUEST_IN" Destination="FC12.REQUEST_IN" dx1="1122.2222" />
+      <Connection Source="FC12.REPLY_OUT" Destination="REPLY_OUT" dx1="2422.2222" />
+      <Connection Source="FC12.REQUEST_OUT" Destination="REQUEST_OUT" dx1="2466.6665" />
     </EventConnections>
     <DataConnections>
       <Connection Source="FC13.MotoRotate" Destination="MotoRotate3" dx1="3355.5554" />
-      <Connection Source="FC12.MotoRotate" Destination="MotoRotate2" dx1="2155.5554" />
+      <Connection Source="FC12.MotoRotate" Destination="MotoRotate2" dx1="2416.6665" />
       <Connection Source="FC11.MotoRotate" Destination="MotoRotate1" dx1="1033.3333" />
       <Connection Source="PE" Destination="FC11.PE" dx1="144.44444" />
       <Connection Source="PE1" Destination="FC12.PE" dx1="1250.0" />
@@ -86,6 +99,7 @@
       <Connection Source="Block" Destination="FC11.Block" dx1="111.11111" />
       <Connection Source="FC11.BlockCon" Destination="BlockCon" dx1="988.88885" />
       <Connection Source="Candidate" Destination="FC11.Candidate" dx1="44.444443" />
+      <Connection Source="PE14" Destination="FC12.PE14" dx1="1233.3333" />
     </DataConnections>
   </FBNetwork>
 </FBType>
