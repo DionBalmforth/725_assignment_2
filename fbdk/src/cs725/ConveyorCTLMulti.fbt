@@ -76,7 +76,7 @@
         <ECAction Algorithm="INIT" Output="INITO" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="REQ" Comment="Normal execution" x="166.66666" y="944.4444" >
+      <ECState Name="REQ" Comment="Normal execution" x="155.55554" y="1033.3333" >
         <ECAction Algorithm="REQ" Output="CNF" />
       </ECState>
       <ECState Name="SEND" x="1627.7777" y="466.66666" >
@@ -91,13 +91,14 @@
       </ECState>
       <ECTransition Source="START" Destination="INIT" Condition="INIT" x="444.44443" y="711.1111" />
       <ECTransition Source="INIT" Destination="START" Condition="1" x="77.77777" y="422.2222" />
-      <ECTransition Source="START" Destination="REQ" Condition="REQ&#38;Candidate" x="816.6666" y="899.99994" />
-      <ECTransition Source="REQ" Destination="START" Condition="1" x="483.3333" y="827.7778" />
+      <ECTransition Source="START" Destination="REQ" Condition="REQ&#38;Candidate" x="583.3333" y="833.3333" />
+      <ECTransition Source="REQ" Destination="START" Condition="1" x="155.55554" y="827.7778" />
       <ECTransition Source="START" Destination="SEND" Condition="REQUEST_IN" x="1283.3333" y="638.88885" />
       <ECTransition Source="SEND" Destination="START" Condition="1" x="1194.4445" y="466.66666" />
-      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE" x="1233.3333" y="816.6666" />
+      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE" x="1211.1111" y="922.22217" />
       <ECTransition Source="WANTED" Destination="HELD" Condition="REPLY_IN" x="1655.5555" y="1133.3333" />
       <ECTransition Source="HELD" Destination="START" Condition="REQ&#38;!PE14" x="1144.4445" y="1116.6666" />
+      <ECTransition Source="WANTED" Destination="START" Condition="1" x="1272.2222" y="761.1111" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />

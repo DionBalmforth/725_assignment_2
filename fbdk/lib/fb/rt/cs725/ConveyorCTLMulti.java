@@ -160,6 +160,7 @@ private void state_WANTED(){
   REQUEST_OUT.serviceEvent(this);
   alg_STOP();
   STOP.serviceEvent(this);
+state_START();
 }
 private static final int index_HELD = 5;
 private void state_HELD(){

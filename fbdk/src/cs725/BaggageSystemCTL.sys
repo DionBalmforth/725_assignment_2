@@ -283,6 +283,7 @@
           <Connection Source="PE.RD_5" Destination="FCThree.ExitPE" dx1="144.44444" dx2="66.666664" dy="793.3333" />
           <Connection Source="PE.RD_9" Destination="FCFour.PE14" dx1="1111.1111" />
           <Connection Source="PE.RD_9" Destination="TCOne.PE14" dx1="788.88885" />
+          <Connection Source="PE.RD_6" Destination="TCOne.PE1" dx1="83.33333" />
         </DataConnections>
       </FBNetwork>
     </Resource>
