@@ -13,39 +13,55 @@
         <With Var="PE" />
         <With Var="Block" />
         <With Var="Candidate" />
+        <With Var="TokenInput" />
       </Event>
       <Event Name="REQ" Comment="Normal Execution Request" >
         <With Var="PE" />
         <With Var="Block" />
         <With Var="Candidate" />
+        <With Var="TokenInput" />
       </Event>
       <Event Name="CAS_STOP" >
+        <With Var="TokenInput" />
       </Event>
       <Event Name="CAS_START" >
+        <With Var="TokenInput" />
+      </Event>
+      <Event Name="TokenStatus_Input" >
+        <With Var="TokenInput" />
       </Event>
     </EventInputs>
     <EventOutputs>
       <Event Name="INITO" Comment="Initialization Confirm" >
         <With Var="MotoRotate" />
         <With Var="BlockCon" />
+        <With Var="TokenOutput" />
       </Event>
       <Event Name="CNF" Comment="Execution Confirmation" >
         <With Var="MotoRotate" />
         <With Var="BlockCon" />
+        <With Var="TokenOutput" />
       </Event>
       <Event Name="STOP" >
+        <With Var="TokenOutput" />
       </Event>
       <Event Name="START" >
+        <With Var="TokenOutput" />
+      </Event>
+      <Event Name="TokenStatus_Output" >
+        <With Var="TokenOutput" />
       </Event>
     </EventOutputs>
     <InputVars>
       <VarDeclaration Name="PE" Type="BOOL" Comment="Input event qualifier" />
       <VarDeclaration Name="Block" Type="BOOL" />
       <VarDeclaration Name="Candidate" Type="BOOL" />
+      <VarDeclaration Name="TokenInput" Type="BOOL" />
     </InputVars>
     <OutputVars>
       <VarDeclaration Name="MotoRotate" Type="BOOL" Comment="Output event qualifier" />
       <VarDeclaration Name="BlockCon" Type="BOOL" />
+      <VarDeclaration Name="TokenOutput" Type="BOOL" />
     </OutputVars>
   </InterfaceList>
   <BasicFB>
@@ -54,13 +70,29 @@
       <VarDeclaration Name="lastBlock" Type="BOOL" InitialValue="0" />
     </InternalVars>
     <ECC >
-      <ECState Name="INIT" Comment="Initialization" x="838.88885" y="183.33333" >
+      <ECState Name="INIT" Comment="Initialization" x="1694.4443" y="200.0" >
         <ECAction Algorithm="INIT" Output="INITO" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="TOKENLESS" Comment="Doesn't have the token" x="844.4444" y="633.3333" >
+      <ECState Name="TOKENLESS" Comment="Doesn't have the token" x="1672.2222" y="800.0" >
+        <ECAction Algorithm="TOKEN_FREE" Output="TokenStatus_Output" />
       </ECState>
-      <ECTransition Source="INIT" Destination="TOKENLESS" Condition="1" x="844.4444" y="444.44443" />
+      <ECState Name="WAIT" Comment="waiting for token" x="322.2222" y="1716.6666" >
+        <ECAction Algorithm="TOKEN_IN_USE" Output="CNF" />
+        <ECAction Algorithm="STOP" />
+      </ECState>
+      <ECState Name="TOKENFUL" x="1772.2222" y="1694.4443" >
+      </ECState>
+      <ECState Name="CRITICAL_SECTION" Comment="Entering the critical section" x="1583.3333" y="2744.4443" >
+        <ECAction Algorithm="START" Output="CNF" />
+      </ECState>
+      <ECState Name="DONE" Comment="Leaving critical section" x="3066.6665" y="1699.9999" >
+      </ECState>
+      <ECTransition Source="INIT" Destination="TOKENLESS" Condition="1" x="1672.2222" y="483.3333" />
+      <ECTransition Source="TOKENLESS" Destination="WAIT" Condition="REQ&#38;!PE" Comment="tick and photoeye sensor" x="994.4444" y="1205.5555" />
+      <ECTransition Source="WAIT" Destination="CRITICAL_SECTION" Condition="TokenStatus_Input&#38;TokenInput" Comment="token status changed nd token availabale" x="938.88885" y="2255.5554" />
+      <ECTransition Source="TOKENFUL" Destination="CRITICAL_SECTION" Condition="REQ&#38;!PE" Comment="needs token so go into critical section" x="1644.4443" y="2383.3333" />
+      <ECTransition Source="TOKENLESS" Destination="TOKENFUL" Condition="TokenStatus_Input&#38;TokenInput" Comment="receives the token" x="1733.3333" y="1388.8888" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
@@ -73,6 +105,12 @@
   </Algorithm>
   <Algorithm Name="STOP" >
     <ST Text="MotoRotate := FALSE;&#10;System.out.println(this + &#34; Stop &#34; + MotoRotate);&#10;&#10;System.out.println(&#34;Stop &#34; + MotoRotate);&#10;" />
+  </Algorithm>
+  <Algorithm Name="TOKEN_IN_USE" >
+    <ST Text="TokenOutput := FALSE;&#10;" />
+  </Algorithm>
+  <Algorithm Name="TOKEN_FREE" >
+    <ST Text="TokenOutput := TRUE;&#10;" />
   </Algorithm>
   </BasicFB>
 </FBType>
