@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ConveyorCTLMulti
   * @author JHC
-  * @version 20191022/JHC
+  * @version 20191023/JHC
   */
 public class ConveyorCTLMulti extends FBInstance
 {
@@ -132,6 +132,9 @@ public class ConveyorCTLMulti extends FBInstance
 private static final int index_START = 0;
 private void state_START(){
   eccState = index_START;
+  alg_START();
+  START.serviceEvent(this);
+  CNF.serviceEvent(this);
 }
 private static final int index_INIT = 1;
 private void state_INIT(){
@@ -153,12 +156,14 @@ private void state_WANTED(){
   REQUEST_OUT.serviceEvent(this);
   alg_STOP();
   STOP.serviceEvent(this);
+  CNF.serviceEvent(this);
 }
 private static final int index_HELD = 4;
 private void state_HELD(){
   eccState = index_HELD;
   alg_START();
   START.serviceEvent(this);
+  CNF.serviceEvent(this);
 }
 /** The default constructor. */
 public ConveyorCTLMulti(){
