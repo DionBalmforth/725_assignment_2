@@ -15,12 +15,6 @@ public class ConveyorCTLMulti extends FBInstance
   public BOOL Block = new BOOL();
 /** VAR Candidate */
   public BOOL Candidate = new BOOL();
-/** VAR PE8 */
-  public BOOL PE8 = new BOOL();
-/** VAR PE11 */
-  public BOOL PE11 = new BOOL();
-/** VAR PE14 */
-  public BOOL PE14 = new BOOL();
 /** Output event qualifier */
   public BOOL MotoRotate = new BOOL();
 /** VAR BlockCon */
@@ -74,9 +68,6 @@ public class ConveyorCTLMulti extends FBInstance
     if("PE".equals(s)) return PE;
     if("Block".equals(s)) return Block;
     if("Candidate".equals(s)) return Candidate;
-    if("PE8".equals(s)) return PE8;
-    if("PE11".equals(s)) return PE11;
-    if("PE14".equals(s)) return PE14;
     return super.ivNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -96,9 +87,6 @@ public class ConveyorCTLMulti extends FBInstance
     if("PE".equals(ivName)) connect_PE((BOOL)newIV);
     else if("Block".equals(ivName)) connect_Block((BOOL)newIV);
     else if("Candidate".equals(ivName)) connect_Candidate((BOOL)newIV);
-    else if("PE8".equals(ivName)) connect_PE8((BOOL)newIV);
-    else if("PE11".equals(ivName)) connect_PE11((BOOL)newIV);
-    else if("PE14".equals(ivName)) connect_PE14((BOOL)newIV);
     else super.connectIV(ivName, newIV);
     }
 /** Connect the given variable to the input variable PE
@@ -118,24 +106,6 @@ public class ConveyorCTLMulti extends FBInstance
  */
   public void connect_Candidate(BOOL newIV){
     Candidate = newIV;
-    }
-/** Connect the given variable to the input variable PE8
-  * @param newIV The variable to connect
- */
-  public void connect_PE8(BOOL newIV){
-    PE8 = newIV;
-    }
-/** Connect the given variable to the input variable PE11
-  * @param newIV The variable to connect
- */
-  public void connect_PE11(BOOL newIV){
-    PE11 = newIV;
-    }
-/** Connect the given variable to the input variable PE14
-  * @param newIV The variable to connect
- */
-  public void connect_PE14(BOOL newIV){
-    PE14 = newIV;
     }
 private static final int index_START = 0;
 private void state_START(){
@@ -172,14 +142,6 @@ private void state_CAS_STOP(){
   CNF.serviceEvent(this);
 state_START();
 }
-private static final int index_WANTED = 5;
-private void state_WANTED(){
-  eccState = index_WANTED;
-}
-private static final int index_HELD = 6;
-private void state_HELD(){
-  eccState = index_HELD;
-}
 /** The default constructor. */
 public ConveyorCTLMulti(){
     super();
@@ -201,9 +163,6 @@ public ConveyorCTLMulti(){
 /** Services the REQ event. */
   public void service_REQ(){
     if ((eccState == index_START) && (Candidate.value)) state_REQ();
-    else if ((eccState == index_START) && (!PE8.value)) state_WANTED();
-    else if ((eccState == index_START) && (!PE11.value)) state_WANTED();
-    else if ((eccState == index_START) && (!PE8.value)) state_WANTED();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){

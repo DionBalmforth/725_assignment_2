@@ -18,9 +18,6 @@
         <With Var="PE" />
         <With Var="Block" />
         <With Var="Candidate" />
-        <With Var="PE8" />
-        <With Var="PE11" />
-        <With Var="PE14" />
       </Event>
       <Event Name="CAS_STOP" >
       </Event>
@@ -45,9 +42,6 @@
       <VarDeclaration Name="PE" Type="BOOL" Comment="Input event qualifier" />
       <VarDeclaration Name="Block" Type="BOOL" />
       <VarDeclaration Name="Candidate" Type="BOOL" />
-      <VarDeclaration Name="PE8" Type="BOOL" />
-      <VarDeclaration Name="PE11" Type="BOOL" />
-      <VarDeclaration Name="PE14" Type="BOOL" />
     </InputVars>
     <OutputVars>
       <VarDeclaration Name="MotoRotate" Type="BOOL" Comment="Output event qualifier" />
@@ -60,38 +54,31 @@
       <VarDeclaration Name="lastBlock" Type="BOOL" InitialValue="0" />
     </InternalVars>
     <ECC >
-      <ECState Name="START" Comment="Initial State" x="944.4444" y="516.6666" >
+      <ECState Name="START" Comment="Initial State" x="552.94116" y="429.41174" >
       </ECState>
-      <ECState Name="INIT" Comment="Initialization" x="177.77777" y="244.44443" >
+      <ECState Name="INIT" Comment="Initialization" x="923.5294" y="141.17647" >
         <ECAction Algorithm="INIT" Output="INITO" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="REQ" Comment="Normal execution" x="111.11111" y="866.6666" >
+      <ECState Name="REQ" Comment="Normal execution" x="223.5294" y="970.5882" >
         <ECAction Algorithm="REQ" Output="CNF" />
       </ECState>
-      <ECState Name="CAS_START" x="611.1111" y="1283.3333" >
+      <ECState Name="CAS_START" x="1300.0" y="1294.1177" >
         <ECAction Algorithm="START" Output="START" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="CAS_STOP" x="944.4444" y="144.44444" >
+      <ECState Name="CAS_STOP" x="1541.1764" y="700.0" >
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="WANTED" x="2150.0" y="466.66666" >
-      </ECState>
-      <ECState Name="HELD" x="3555.5554" y="394.44443" >
-      </ECState>
-      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="566.6666" y="622.22217" />
-      <ECTransition Source="INIT" Destination="START" Condition="1" x="200.0" y="333.3333" />
-      <ECTransition Source="START" Destination="REQ" Condition="REQ&#38;Candidate" x="833.3333" y="700.0" />
-      <ECTransition Source="REQ" Destination="START" Condition="1" x="499.99997" y="627.7778" />
-      <ECTransition Source="START" Destination="CAS_START" Condition="CAS_START" x="666.6666" y="1144.4445" />
-      <ECTransition Source="CAS_START" Destination="START" Condition="1" x="916.6666" y="1083.3333" />
-      <ECTransition Source="START" Destination="CAS_STOP" Condition="CAS_STOP" x="905.55554" y="233.33333" />
-      <ECTransition Source="CAS_STOP" Destination="START" Condition="1" x="1200.0" y="116.666664" />
-      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE8" x="1694.4443" y="472.2222" />
-      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE11" x="1694.4443" y="472.2222" />
-      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE8" x="1672.2222" y="516.6666" />
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="923.5294" y="429.41174" />
+      <ECTransition Source="INIT" Destination="START" Condition="1" x="552.94116" y="141.17647" />
+      <ECTransition Source="START" Destination="REQ" Condition="REQ&#38;Candidate" x="552.94116" y="717.64703" />
+      <ECTransition Source="REQ" Destination="START" Condition="1" x="223.5294" y="647.05884" />
+      <ECTransition Source="START" Destination="CAS_START" Condition="CAS_START" x="964.7059" y="1064.7058" />
+      <ECTransition Source="CAS_START" Destination="START" Condition="1" x="1217.6471" y="1005.8823" />
+      <ECTransition Source="START" Destination="CAS_STOP" Condition="CAS_STOP" x="1111.7646" y="700.0" />
+      <ECTransition Source="CAS_STOP" Destination="START" Condition="1" x="1405.8823" y="582.3529" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
