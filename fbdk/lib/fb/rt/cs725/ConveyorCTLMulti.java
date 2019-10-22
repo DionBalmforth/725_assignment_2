@@ -141,28 +141,20 @@ private void state_INIT(){
   CNF.serviceEvent(this);
 state_START();
 }
-private static final int index_REQ = 2;
-private void state_REQ(){
-  eccState = index_REQ;
-  alg_REQ();
-  CNF.serviceEvent(this);
-state_START();
-}
-private static final int index_SEND = 3;
+private static final int index_SEND = 2;
 private void state_SEND(){
   eccState = index_SEND;
   REPLY_OUT.serviceEvent(this);
 state_START();
 }
-private static final int index_WANTED = 4;
+private static final int index_WANTED = 3;
 private void state_WANTED(){
   eccState = index_WANTED;
   REQUEST_OUT.serviceEvent(this);
   alg_STOP();
   STOP.serviceEvent(this);
-state_START();
 }
-private static final int index_HELD = 5;
+private static final int index_HELD = 4;
 private void state_HELD(){
   eccState = index_HELD;
   alg_START();
@@ -190,8 +182,7 @@ public ConveyorCTLMulti(){
   }
 /** Services the REQ event. */
   public void service_REQ(){
-    if ((eccState == index_START) && (Candidate.value)) state_REQ();
-    else if ((eccState == index_START) && (!PE.value)) state_WANTED();
+    if ((eccState == index_START) && (!PE.value)) state_WANTED();
     else if ((eccState == index_HELD) && (!PE14.value)) state_START();
   }
 /** Services the CAS_STOP event. */

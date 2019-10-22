@@ -72,33 +72,27 @@
     <ECC >
       <ECState Name="START" Comment="Initial State" x="872.22217" y="638.88885" >
       </ECState>
-      <ECState Name="INIT" Comment="Initialization" x="127.77777" y="211.1111" >
+      <ECState Name="INIT" Comment="Initialization" x="244.44443" y="155.55554" >
         <ECAction Algorithm="INIT" Output="INITO" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="REQ" Comment="Normal execution" x="155.55554" y="1033.3333" >
-        <ECAction Algorithm="REQ" Output="CNF" />
-      </ECState>
-      <ECState Name="SEND" x="1627.7777" y="466.66666" >
+      <ECState Name="SEND" x="1805.5555" y="338.8889" >
         <ECAction Output="REPLY_OUT" />
       </ECState>
       <ECState Name="WANTED" x="1666.6666" y="922.22217" >
         <ECAction Output="REQUEST_OUT" />
         <ECAction Algorithm="STOP" Output="STOP" />
       </ECState>
-      <ECState Name="HELD" x="1655.5555" y="1372.2222" >
+      <ECState Name="HELD" x="1633.3333" y="1472.2222" >
         <ECAction Algorithm="START" Output="START" />
       </ECState>
-      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="444.44443" y="711.1111" />
-      <ECTransition Source="INIT" Destination="START" Condition="1" x="77.77777" y="422.2222" />
-      <ECTransition Source="START" Destination="REQ" Condition="REQ&#38;Candidate" x="583.3333" y="833.3333" />
-      <ECTransition Source="REQ" Destination="START" Condition="1" x="155.55554" y="827.7778" />
-      <ECTransition Source="START" Destination="SEND" Condition="REQUEST_IN" x="1283.3333" y="638.88885" />
-      <ECTransition Source="SEND" Destination="START" Condition="1" x="1194.4445" y="466.66666" />
-      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE" x="1211.1111" y="922.22217" />
-      <ECTransition Source="WANTED" Destination="HELD" Condition="REPLY_IN" x="1655.5555" y="1133.3333" />
-      <ECTransition Source="HELD" Destination="START" Condition="REQ&#38;!PE14" x="1144.4445" y="1116.6666" />
-      <ECTransition Source="WANTED" Destination="START" Condition="1" x="1272.2222" y="761.1111" />
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="677.7778" y="499.99997" />
+      <ECTransition Source="INIT" Destination="START" Condition="1" x="244.44443" y="644.4444" />
+      <ECTransition Source="START" Destination="SEND" Condition="REQUEST_IN" x="1261.1111" y="477.77777" />
+      <ECTransition Source="SEND" Destination="START" Condition="1" x="866.6666" y="249.99998" />
+      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE" x="1161.1111" y="922.22217" />
+      <ECTransition Source="WANTED" Destination="HELD" Condition="REPLY_IN" x="1633.3333" y="1183.3333" />
+      <ECTransition Source="HELD" Destination="START" Condition="REQ&#38;!PE14" x="877.7778" y="1472.2222" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
