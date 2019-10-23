@@ -141,6 +141,8 @@ private void state_TOKENLESS(){
   eccState = index_TOKENLESS;
   alg_TOKEN_FREE();
   TokenStatus_Output.serviceEvent(this);
+  alg_START();
+  CNF.serviceEvent(this);
 }
 private static final int index_INIT = 1;
 private void state_INIT(){
@@ -197,7 +199,7 @@ public RingTokenCTL(){
     else if ((eccState == index_TOKENFUL) && (!PE.value)) state_CRITICAL_SECTION();
     else if ((eccState == index_TOKENFUL) && (PE.value)) state_TOKENLESS();
     else if ((eccState == index_CRITICAL_SECTION) && (PE.value)) state_DONE();
-    else if ((eccState == index_DONE) && (PExit.value)) state_TOKENLESS();
+    else if ((eccState == index_DONE) && (!PExit.value)) state_TOKENLESS();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){

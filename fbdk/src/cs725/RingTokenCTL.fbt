@@ -76,33 +76,34 @@
       <VarDeclaration Name="lastBlock" Type="BOOL" InitialValue="0" />
     </InternalVars>
     <ECC >
-      <ECState Name="TOKENLESS" Comment="Doesn't have the token" x="1670.5883" y="800.0" >
+      <ECState Name="TOKENLESS" Comment="Doesn't have the token" x="1672.2222" y="800.0" >
         <ECAction Algorithm="TOKEN_FREE" Output="TokenStatus_Output" />
+        <ECAction Algorithm="START" Output="CNF" />
       </ECState>
-      <ECState Name="INIT" Comment="Initialization" x="1694.1177" y="200.0" >
+      <ECState Name="INIT" Comment="Initialization" x="1694.4443" y="200.0" >
         <ECAction Algorithm="INIT" Output="INITO" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="WAIT" Comment="waiting for token" x="323.52942" y="1717.647" >
+      <ECState Name="WAIT" Comment="waiting for token" x="322.2222" y="1716.6666" >
         <ECAction Algorithm="STOP" Output="CNF" />
       </ECState>
-      <ECState Name="TOKENFUL" x="1770.5883" y="1694.1177" >
+      <ECState Name="TOKENFUL" x="1772.2222" y="1694.4443" >
         <ECAction Algorithm="TOKEN_IN_USE" Output="TokenStatus_Output" />
       </ECState>
-      <ECState Name="CRITICAL_SECTION" Comment="Entering the critical section" x="1582.3529" y="2747.0588" >
+      <ECState Name="CRITICAL_SECTION" Comment="Entering the critical section" x="1583.3333" y="2744.4443" >
         <ECAction Algorithm="START" Output="CNF" />
       </ECState>
-      <ECState Name="DONE" Comment="Leaving critical section" x="3223.5293" y="1694.1177" >
+      <ECState Name="DONE" Comment="Leaving critical section" x="3222.2222" y="1694.4443" >
       </ECState>
-      <ECTransition Source="INIT" Destination="TOKENLESS" Condition="1" x="1670.5883" y="482.35294" />
-      <ECTransition Source="TOKENLESS" Destination="WAIT" Condition="REQ&#38;!PE" Comment="tick and photoeye sensor" x="994.1176" y="1205.8823" />
-      <ECTransition Source="WAIT" Destination="CRITICAL_SECTION" Condition="TokenStatus_Input&#38;TokenInput" Comment="token status changed nd token availabale" x="941.17645" y="2252.9412" />
-      <ECTransition Source="TOKENFUL" Destination="CRITICAL_SECTION" Condition="REQ&#38;!PE" Comment="needs token so go into critical section" x="1647.0588" y="2382.3528" />
-      <ECTransition Source="TOKENLESS" Destination="TOKENFUL" Condition="TokenStatus_Input&#38;TokenInput" Comment="receives the token" x="1458.8235" y="1323.5294" />
-      <ECTransition Source="TOKENFUL" Destination="TOKENLESS" Condition="REQ&#38;PE" Comment="Token not needed" x="1970.5883" y="1176.4706" />
-      <ECTransition Source="CRITICAL_SECTION" Destination="DONE" Condition="REQ&#38;PE" Comment="No longer being sensed by photo eye" x="2658.8235" y="2052.9412" />
-      <ECTransition Source="DONE" Destination="TOKENLESS" Condition="REQ&#38;PExit" x="2194.1177" y="1100.0" />
-      <ECTransition Source="TOKENLESS" Destination="INIT" Condition="INIT" x="1894.1176" y="400.0" />
+      <ECTransition Source="INIT" Destination="TOKENLESS" Condition="1" x="1672.2222" y="483.3333" />
+      <ECTransition Source="TOKENLESS" Destination="WAIT" Condition="REQ&#38;!PE" Comment="tick and photoeye sensor" x="994.4444" y="1205.5555" />
+      <ECTransition Source="WAIT" Destination="CRITICAL_SECTION" Condition="TokenStatus_Input&#38;TokenInput" Comment="token status changed nd token availabale" x="938.88885" y="2255.5554" />
+      <ECTransition Source="TOKENFUL" Destination="CRITICAL_SECTION" Condition="REQ&#38;!PE" Comment="needs token so go into critical section" x="1644.4443" y="2383.3333" />
+      <ECTransition Source="TOKENLESS" Destination="TOKENFUL" Condition="TokenStatus_Input&#38;TokenInput" Comment="receives the token" x="1461.1111" y="1322.2222" />
+      <ECTransition Source="TOKENFUL" Destination="TOKENLESS" Condition="REQ&#38;PE" Comment="Token not needed" x="1972.2222" y="1177.7777" />
+      <ECTransition Source="CRITICAL_SECTION" Destination="DONE" Condition="REQ&#38;PE" Comment="No longer being sensed by photo eye" x="2661.111" y="2055.5554" />
+      <ECTransition Source="DONE" Destination="TOKENLESS" Condition="REQ&#38;!PExit" x="2194.4443" y="1100.0" />
+      <ECTransition Source="TOKENLESS" Destination="INIT" Condition="INIT" x="1894.4443" y="400.0" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
