@@ -74,33 +74,68 @@
       <VarDeclaration Name="lastBlock" Type="BOOL" InitialValue="0" />
     </InternalVars>
     <ECC >
-      <ECState Name="START" Comment="Initial State" x="733.3333" y="683.3333" >
+      <ECState Name="START" Comment="Initial State" x="1744.4443" y="733.3333" >
         <ECAction Output="CNF" />
+        <ECAction Algorithm="START1" />
       </ECState>
-      <ECState Name="INIT" Comment="Initialization" x="244.44443" y="155.55554" >
+      <ECState Name="INIT" Comment="Initialization" x="1005.55554" y="294.44443" >
         <ECAction Algorithm="INIT" Output="INITO" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="SEND" x="1338.8888" y="227.77777" >
+      <ECState Name="SEND" x="4227.778" y="288.8889" >
+        <ECAction Algorithm="SEND_P" />
         <ECAction Output="REPLY_OUT" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="WANTED" x="1438.8888" y="1183.3333" >
+      <ECState Name="WANTED" x="2772.2222" y="1116.6666" >
+        <ECAction Algorithm="WANTED_P" />
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="REQUEST_OUT" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="HELD" x="1450.0" y="1805.5555" >
-        <ECAction Algorithm="START" Output="START" />
+      <ECState Name="HELD" x="2783.3333" y="2188.889" >
+        <ECAction Algorithm="HELD_P" />
         <ECAction Output="CNF" />
+        <ECAction Algorithm="START" Output="START" />
       </ECState>
-      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="394.44443" y="361.11108" />
-      <ECTransition Source="INIT" Destination="START" Condition="1" x="244.44443" y="683.3333" />
-      <ECTransition Source="WANTED" Destination="HELD" Condition="REPLY_IN" x="1455.5555" y="1427.7777" />
-      <ECTransition Source="START" Destination="SEND" Condition="REQUEST_IN" x="1144.4445" y="477.77777" />
-      <ECTransition Source="SEND" Destination="START" Condition="1" x="855.55554" y="361.11108" />
-      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE" x="1122.2222" y="938.88885" />
-      <ECTransition Source="HELD" Destination="START" Condition="REQ&#38;!PE14" x="733.3333" y="1805.5555" />
+      <ECState Name="NEW_BAG" x="2194.4443" y="2855.5554" >
+        <ECAction Algorithm="NEWBAG_P" />
+      </ECState>
+      <ECState Name="NEW_REQUEST" x="3605.5554" y="3266.6665" >
+        <ECAction Algorithm="NEWREQUEST_P" />
+      </ECState>
+      <ECState Name="STOP" x="4605.555" y="2672.2222" >
+        <ECAction Algorithm="STOP_P" />
+        <ECAction Algorithm="STOP" Output="STOP" />
+      </ECState>
+      <ECState Name="SEND1" x="4588.8887" y="2066.6665" >
+        <ECAction Algorithm="SEND1_P" />
+        <ECAction Output="REPLY_OUT" />
+      </ECState>
+      <ECState Name="NEW_REQUEST2" x="1633.3333" y="2450.0" >
+      </ECState>
+      <ECState Name="STOP2" x="1061.1111" y="2450.0" >
+      </ECState>
+      <ECState Name="SEND2" x="1061.1111" y="1111.1111" >
+      </ECState>
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="1233.3333" y="594.4444" />
+      <ECTransition Source="INIT" Destination="START" Condition="1" x="1038.8888" y="750.0" />
+      <ECTransition Source="WANTED" Destination="HELD" Condition="REPLY_IN" x="2783.3333" y="1766.6666" />
+      <ECTransition Source="START" Destination="SEND" Condition="REQUEST_IN" x="3027.7776" y="505.55554" />
+      <ECTransition Source="SEND" Destination="START" Condition="1" x="1744.4443" y="300.0" />
+      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE" x="2772.2222" y="733.3333" />
+      <ECTransition Source="HELD" Destination="START" Condition="REQ&#38;!PE14" x="1744.4443" y="2188.889" />
+      <ECTransition Source="HELD" Destination="NEW_BAG" Condition="REQ&#38;!PE" x="2583.3333" y="2544.4443" />
+      <ECTransition Source="HELD" Destination="NEW_REQUEST" Condition="REQUEST_IN" x="2783.3333" y="3266.6665" />
+      <ECTransition Source="NEW_REQUEST" Destination="STOP" Condition="REQ&#38;!PE" x="4288.8887" y="2955.5554" />
+      <ECTransition Source="STOP" Destination="SEND1" Condition="REQ&#38;!PE14" x="4605.555" y="2366.6665" />
+      <ECTransition Source="SEND1" Destination="WANTED" Condition="1" x="3494.4443" y="1805.5555" />
+      <ECTransition Source="NEW_REQUEST" Destination="SEND" Condition="REQ&#38;!PE14" x="4005.5554" y="2161.111" />
+      <ECTransition Source="NEW_BAG" Destination="NEW_REQUEST2" Condition="REQUEST_IN" x="1633.3333" y="2855.5554" />
+      <ECTransition Source="NEW_REQUEST2" Destination="STOP2" Condition="REQ&#38;!PE" x="1122.2222" y="2438.889" />
+      <ECTransition Source="STOP2" Destination="SEND2" Condition="REQ&#38;!PE14" x="1061.1111" y="1616.6666" />
+      <ECTransition Source="SEND2" Destination="WANTED" Condition="1" x="2177.7776" y="1116.6666" />
+      <ECTransition Source="NEW_BAG" Destination="WANTED" Condition="REQ&#38;!PE14" x="2194.4443" y="1677.7777" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
@@ -112,10 +147,34 @@
     <ST Text="MotoRotate:=TRUE;&#10;System.out.println(this + &#34; Start &#34; + MotoRotate);&#10;&#10;System.out.println(&#34;Start &#34; + MotoRotate);&#10;" />
   </Algorithm>
   <Algorithm Name="STOP" >
-    <ST Text="MotoRotate := FALSE;&#10;System.out.println(this + &#34; Stop &#34; + MotoRotate);&#10;&#10;System.out.println(&#34;Stop &#34; + MotoRotate);&#10;" />
+    <ST Text="MotoRotate := FALSE;&#10;System.out.println(this + &#34; Stop &#34; + MotoRotate);&#10;&#10;System.out.println(&#34;Stop &#34; + MotoRotate);&#10;System.out.println(&#34;IN WAITING&#34;);&#10;" />
   </Algorithm>
   <Algorithm Name="print" >
     <ST Text="System.out.println(this + &#34;IM here&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="START1" >
+    <Other Language="Java" Text="System.out.println(&#34;START STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="SEND_P" >
+    <Other Language="Java" Text="System.out.println(&#34;SEND STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="WANTED_P" >
+    <Other Language="Java" Text="System.out.println(&#34;WANTED STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="HELD_P" >
+    <Other Language="Java" Text="System.out.println(&#34;HELD STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="NEWBAG_P" >
+    <Other Language="Java" Text="System.out.println(&#34;NEWBAG STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="NEWREQUEST_P" >
+    <Other Language="Java" Text="System.out.println(&#34;NEWREQUEST STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="SEND1_P" >
+    <Other Language="Java" Text="System.out.println(&#34;SEND1 STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="STOP_P" >
+    <Other Language="Java" Text="System.out.println(&#34;STOP STATE&#34;);&#10;" />
   </Algorithm>
   </BasicFB>
 </FBType>

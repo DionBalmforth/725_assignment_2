@@ -133,6 +133,7 @@ private static final int index_START = 0;
 private void state_START(){
   eccState = index_START;
   CNF.serviceEvent(this);
+  alg_START1();
 }
 private static final int index_INIT = 1;
 private void state_INIT(){
@@ -145,6 +146,7 @@ state_START();
 private static final int index_SEND = 2;
 private void state_SEND(){
   eccState = index_SEND;
+  alg_SEND_P();
   REPLY_OUT.serviceEvent(this);
   CNF.serviceEvent(this);
 state_START();
@@ -152,6 +154,7 @@ state_START();
 private static final int index_WANTED = 3;
 private void state_WANTED(){
   eccState = index_WANTED;
+  alg_WANTED_P();
   alg_STOP();
   STOP.serviceEvent(this);
   REQUEST_OUT.serviceEvent(this);
@@ -160,9 +163,47 @@ private void state_WANTED(){
 private static final int index_HELD = 4;
 private void state_HELD(){
   eccState = index_HELD;
+  alg_HELD_P();
+  CNF.serviceEvent(this);
   alg_START();
   START.serviceEvent(this);
-  CNF.serviceEvent(this);
+}
+private static final int index_NEW_BAG = 5;
+private void state_NEW_BAG(){
+  eccState = index_NEW_BAG;
+  alg_NEWBAG_P();
+}
+private static final int index_NEW_REQUEST = 6;
+private void state_NEW_REQUEST(){
+  eccState = index_NEW_REQUEST;
+  alg_NEWREQUEST_P();
+}
+private static final int index_STOP = 7;
+private void state_STOP(){
+  eccState = index_STOP;
+  alg_STOP_P();
+  alg_STOP();
+  STOP.serviceEvent(this);
+}
+private static final int index_SEND1 = 8;
+private void state_SEND1(){
+  eccState = index_SEND1;
+  alg_SEND1_P();
+  REPLY_OUT.serviceEvent(this);
+state_WANTED();
+}
+private static final int index_NEW_REQUEST2 = 9;
+private void state_NEW_REQUEST2(){
+  eccState = index_NEW_REQUEST2;
+}
+private static final int index_STOP2 = 10;
+private void state_STOP2(){
+  eccState = index_STOP2;
+}
+private static final int index_SEND2 = 11;
+private void state_SEND2(){
+  eccState = index_SEND2;
+state_WANTED();
 }
 /** The default constructor. */
 public ConveyorCTLMulti(){
@@ -188,6 +229,13 @@ public ConveyorCTLMulti(){
   public void service_REQ(){
     if ((eccState == index_START) && (!PE.value)) state_WANTED();
     else if ((eccState == index_HELD) && (!PE14.value)) state_START();
+    else if ((eccState == index_HELD) && (!PE.value)) state_NEW_BAG();
+    else if ((eccState == index_NEW_REQUEST) && (!PE.value)) state_STOP();
+    else if ((eccState == index_STOP) && (!PE14.value)) state_SEND1();
+    else if ((eccState == index_NEW_REQUEST) && (!PE14.value)) state_SEND();
+    else if ((eccState == index_NEW_REQUEST2) && (!PE.value)) state_STOP2();
+    else if ((eccState == index_STOP2) && (!PE14.value)) state_SEND2();
+    else if ((eccState == index_NEW_BAG) && (!PE14.value)) state_WANTED();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
@@ -202,6 +250,8 @@ public ConveyorCTLMulti(){
 /** Services the REQUEST_IN event. */
   public void service_REQUEST_IN(){
     if ((eccState == index_START)) state_SEND();
+    else if ((eccState == index_HELD)) state_NEW_REQUEST();
+    else if ((eccState == index_NEW_BAG)) state_NEW_REQUEST2();
   }
   /** ALGORITHM INIT IN ST*/
 public void alg_INIT(){
@@ -254,9 +304,50 @@ MotoRotate.value=false;
 System.out.println(this+" Stop "+MotoRotate.value);
 
 System.out.println("Stop "+MotoRotate.value);
+System.out.println("IN WAITING");
 }
   /** ALGORITHM print IN ST*/
 public void alg_print(){
 System.out.println(this+"IM here");
+}
+  /** ALGORITHM START1 IN Java*/
+public void alg_START1(){
+System.out.println("START STATE");
+
+}
+  /** ALGORITHM SEND_P IN Java*/
+public void alg_SEND_P(){
+System.out.println("SEND STATE");
+
+}
+  /** ALGORITHM WANTED_P IN Java*/
+public void alg_WANTED_P(){
+System.out.println("WANTED STATE");
+
+}
+  /** ALGORITHM HELD_P IN Java*/
+public void alg_HELD_P(){
+System.out.println("HELD STATE");
+
+}
+  /** ALGORITHM NEWBAG_P IN Java*/
+public void alg_NEWBAG_P(){
+System.out.println("NEWBAG STATE");
+
+}
+  /** ALGORITHM NEWREQUEST_P IN Java*/
+public void alg_NEWREQUEST_P(){
+System.out.println("NEWREQUEST STATE");
+
+}
+  /** ALGORITHM SEND1_P IN Java*/
+public void alg_SEND1_P(){
+System.out.println("SEND1 STATE");
+
+}
+  /** ALGORITHM STOP_P IN Java*/
+public void alg_STOP_P(){
+System.out.println("STOP STATE");
+
 }
 }
