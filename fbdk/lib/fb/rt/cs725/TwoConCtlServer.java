@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK TwoConCtlServer
   * @author JHC
-  * @version 20191023/JHC
+  * @version 20191024/JHC
   */
 public class TwoConCtlServer extends FBInstance
 {
@@ -128,7 +128,7 @@ public class TwoConCtlServer extends FBInstance
     FC12.connectIVNoException("ExitPE",ExitPE);
     }
 /** FB FC11 */
-  protected ConveyorCTLServerBack FC11 = new ConveyorCTLServerBack() ;
+  protected ConveyorCTL FC11 = new ConveyorCTL() ;
 /** FB FC12 */
   protected ConveyorCTLServer FC12 = new ConveyorCTLServer() ;
 /** The default constructor. */
@@ -142,12 +142,11 @@ public TwoConCtlServer(){
     FC12.Release.connectTo(Release);
     REQ.connectTo(FC12.REQ);
     STOP.connectTo(FC12.CAS_STOP);
-    FC11.START.connectTo(FC12.CAS_START);
+    START.connectTo(FC12.CAS_START);
+    Grant.connectTo(FC12.Grant);
     FC12.STOP.connectTo(FC11.CAS_STOP);
-    START.connectTo(FC11.CAS_START);
+    FC12.START.connectTo(FC11.CAS_START);
     FC11.INITO.connectTo(FC12.INIT);
-    Grant.connectTo(FC11.Grant);
-    FC11.CAS_GRANT.connectTo(FC12.Grant);
     FC12.connectIVNoException("Block",Block);
     FC12.connectIVNoException("Candidate",Candidate);
     FC12.connectIVNoException("EnterPE",EnterPE);
