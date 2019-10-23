@@ -1,11 +1,11 @@
-/* Copyright (c)2018 Rockwell Automation. All rights reserved. */
+/* Copyright (c)2019 Rockwell Automation. All rights reserved. */
 package fb.rt.cs725;
 import fb.datatype.*;
 import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ConveyorCTL
   * @author JHC
-  * @version 20180924/JHC
+  * @version 20191023/JHC
   */
 public class ConveyorCTL extends FBInstance
 {

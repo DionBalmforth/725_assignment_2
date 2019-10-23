@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK RingTokenCTL
   * @author JHC
-  * @version 20191022/JHC
+  * @version 20191023/JHC
   */
 public class RingTokenCTL extends FBInstance
 {
@@ -136,7 +136,13 @@ public class RingTokenCTL extends FBInstance
   public void connect_PExit(BOOL newIV){
     PExit = newIV;
     }
-private static final int index_INIT = 0;
+private static final int index_TOKENLESS = 0;
+private void state_TOKENLESS(){
+  eccState = index_TOKENLESS;
+  alg_TOKEN_FREE();
+  TokenStatus_Output.serviceEvent(this);
+}
+private static final int index_INIT = 1;
 private void state_INIT(){
   eccState = index_INIT;
   alg_INIT();
@@ -144,16 +150,11 @@ private void state_INIT(){
   CNF.serviceEvent(this);
 state_TOKENLESS();
 }
-private static final int index_TOKENLESS = 1;
-private void state_TOKENLESS(){
-  eccState = index_TOKENLESS;
-  alg_TOKEN_FREE();
-  TokenStatus_Output.serviceEvent(this);
-}
 private static final int index_WAIT = 2;
 private void state_WAIT(){
   eccState = index_WAIT;
   alg_STOP();
+  STOP.serviceEvent(this);
   CNF.serviceEvent(this);
 }
 private static final int index_TOKENFUL = 3;
@@ -166,6 +167,7 @@ private static final int index_CRITICAL_SECTION = 4;
 private void state_CRITICAL_SECTION(){
   eccState = index_CRITICAL_SECTION;
   alg_START();
+  START.serviceEvent(this);
   CNF.serviceEvent(this);
 }
 private static final int index_DONE = 5;
@@ -189,6 +191,7 @@ public RingTokenCTL(){
   }
 /** Services the INIT event. */
   public void service_INIT(){
+    if ((eccState == index_TOKENLESS)) state_INIT();
   }
 /** Services the REQ event. */
   public void service_REQ(){

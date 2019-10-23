@@ -13,48 +13,33 @@
         <With Var="PE" />
         <With Var="Block" />
         <With Var="Candidate" />
-        <With Var="TokenInput" />
-        <With Var="PExit" />
       </Event>
       <Event Name="REQ" Comment="Normal Execution Request" >
         <With Var="PE" />
         <With Var="Block" />
         <With Var="Candidate" />
-        <With Var="TokenInput" />
-        <With Var="PExit" />
       </Event>
       <Event Name="CAS_STOP" >
-        <With Var="TokenInput" />
-        <With Var="PExit" />
       </Event>
       <Event Name="CAS_START" >
-        <With Var="TokenInput" />
-        <With Var="PExit" />
       </Event>
       <Event Name="TokenStatus_Input" >
-        <With Var="TokenInput" />
-        <With Var="PExit" />
       </Event>
     </EventInputs>
     <EventOutputs>
       <Event Name="INITO" Comment="Initialization Confirm" >
         <With Var="MotoRotate" />
         <With Var="BlockCon" />
-        <With Var="TokenOutput" />
       </Event>
       <Event Name="CNF" Comment="Execution Confirmation" >
         <With Var="MotoRotate" />
         <With Var="BlockCon" />
-        <With Var="TokenOutput" />
       </Event>
       <Event Name="STOP" >
-        <With Var="TokenOutput" />
       </Event>
       <Event Name="START" >
-        <With Var="TokenOutput" />
       </Event>
       <Event Name="TokenStatus_Output" >
-        <With Var="TokenOutput" />
       </Event>
     </EventOutputs>
     <InputVars>
@@ -76,21 +61,23 @@
       <VarDeclaration Name="lastBlock" Type="BOOL" InitialValue="0" />
     </InternalVars>
     <ECC >
+      <ECState Name="TOKENLESS" Comment="Doesn't have the token" x="1672.2222" y="800.0" >
+        <ECAction Algorithm="TOKEN_FREE" Output="TokenStatus_Output" />
+      </ECState>
       <ECState Name="INIT" Comment="Initialization" x="1694.4443" y="200.0" >
         <ECAction Algorithm="INIT" Output="INITO" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="TOKENLESS" Comment="Doesn't have the token" x="1672.2222" y="800.0" >
-        <ECAction Algorithm="TOKEN_FREE" Output="TokenStatus_Output" />
-      </ECState>
       <ECState Name="WAIT" Comment="waiting for token" x="322.2222" y="1716.6666" >
-        <ECAction Algorithm="STOP" Output="CNF" />
+        <ECAction Algorithm="STOP" Output="STOP" />
+        <ECAction Output="CNF" />
       </ECState>
       <ECState Name="TOKENFUL" x="1772.2222" y="1694.4443" >
         <ECAction Algorithm="TOKEN_IN_USE" Output="TokenStatus_Output" />
       </ECState>
       <ECState Name="CRITICAL_SECTION" Comment="Entering the critical section" x="1583.3333" y="2744.4443" >
-        <ECAction Algorithm="START" Output="CNF" />
+        <ECAction Algorithm="START" Output="START" />
+        <ECAction Output="CNF" />
       </ECState>
       <ECState Name="DONE" Comment="Leaving critical section" x="3222.2222" y="1694.4443" >
       </ECState>
@@ -102,6 +89,7 @@
       <ECTransition Source="TOKENFUL" Destination="TOKENLESS" Condition="REQ&#38;PE" Comment="Token not needed" x="1972.2222" y="1177.7777" />
       <ECTransition Source="CRITICAL_SECTION" Destination="DONE" Condition="REQ&#38;PE" Comment="No longer being sensed by photo eye" x="2661.111" y="2050.0" />
       <ECTransition Source="DONE" Destination="TOKENLESS" Condition="REQ&#38;PExit" x="2194.4443" y="1100.0" />
+      <ECTransition Source="TOKENLESS" Destination="INIT" Condition="INIT" x="1894.4443" y="400.0" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
