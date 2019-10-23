@@ -17,6 +17,8 @@ public class RingTokenCTL extends FBInstance
   public BOOL Candidate = new BOOL();
 /** VAR TokenInput */
   public BOOL TokenInput = new BOOL();
+/** VAR PExit */
+  public BOOL PExit = new BOOL();
 /** Output event qualifier */
   public BOOL MotoRotate = new BOOL();
 /** VAR BlockCon */
@@ -79,6 +81,7 @@ public class RingTokenCTL extends FBInstance
     if("Block".equals(s)) return Block;
     if("Candidate".equals(s)) return Candidate;
     if("TokenInput".equals(s)) return TokenInput;
+    if("PExit".equals(s)) return PExit;
     return super.ivNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -100,6 +103,7 @@ public class RingTokenCTL extends FBInstance
     else if("Block".equals(ivName)) connect_Block((BOOL)newIV);
     else if("Candidate".equals(ivName)) connect_Candidate((BOOL)newIV);
     else if("TokenInput".equals(ivName)) connect_TokenInput((BOOL)newIV);
+    else if("PExit".equals(ivName)) connect_PExit((BOOL)newIV);
     else super.connectIV(ivName, newIV);
     }
 /** Connect the given variable to the input variable PE
@@ -126,6 +130,12 @@ public class RingTokenCTL extends FBInstance
   public void connect_TokenInput(BOOL newIV){
     TokenInput = newIV;
     }
+/** Connect the given variable to the input variable PExit
+  * @param newIV The variable to connect
+ */
+  public void connect_PExit(BOOL newIV){
+    PExit = newIV;
+    }
 private static final int index_INIT = 0;
 private void state_INIT(){
   eccState = index_INIT;
@@ -143,9 +153,8 @@ private void state_TOKENLESS(){
 private static final int index_WAIT = 2;
 private void state_WAIT(){
   eccState = index_WAIT;
-  alg_TOKEN_IN_USE();
-  CNF.serviceEvent(this);
   alg_STOP();
+  CNF.serviceEvent(this);
 }
 private static final int index_TOKENFUL = 3;
 private void state_TOKENFUL(){
@@ -185,6 +194,9 @@ public RingTokenCTL(){
   public void service_REQ(){
     if ((eccState == index_TOKENLESS) && (!PE.value)) state_WAIT();
     else if ((eccState == index_TOKENFUL) && (!PE.value)) state_CRITICAL_SECTION();
+    else if ((eccState == index_TOKENFUL) && (PE.value)) state_TOKENLESS();
+    else if ((eccState == index_CRITICAL_SECTION) && (PE.value)) state_DONE();
+    else if ((eccState == index_DONE) && (PExit.value)) state_TOKENLESS();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
