@@ -142,6 +142,7 @@ private void state_TOKENLESS(){
   alg_TOKEN_FREE();
   TokenStatus_Output.serviceEvent(this);
   alg_START();
+  START.serviceEvent(this);
   CNF.serviceEvent(this);
 }
 private static final int index_INIT = 1;
@@ -156,6 +157,7 @@ private static final int index_WAIT = 2;
 private void state_WAIT(){
   eccState = index_WAIT;
   alg_STOP();
+  STOP.serviceEvent(this);
   CNF.serviceEvent(this);
 }
 private static final int index_TOKENFUL = 3;
@@ -168,11 +170,19 @@ private static final int index_CRITICAL_SECTION = 4;
 private void state_CRITICAL_SECTION(){
   eccState = index_CRITICAL_SECTION;
   alg_START();
+  START.serviceEvent(this);
   CNF.serviceEvent(this);
 }
 private static final int index_DONE = 5;
 private void state_DONE(){
   eccState = index_DONE;
+}
+private static final int index_DONE_STOP = 6;
+private void state_DONE_STOP(){
+  eccState = index_DONE_STOP;
+  alg_STOP();
+  STOP.serviceEvent(this);
+  CNF.serviceEvent(this);
 }
 /** The default constructor. */
 public RingTokenCTL(){
@@ -200,6 +210,8 @@ public RingTokenCTL(){
     else if ((eccState == index_TOKENFUL) && (PE.value)) state_TOKENLESS();
     else if ((eccState == index_CRITICAL_SECTION) && (PE.value)) state_DONE();
     else if ((eccState == index_DONE) && (!PExit.value)) state_TOKENLESS();
+    else if ((eccState == index_DONE) && (!PE.value)) state_DONE_STOP();
+    else if ((eccState == index_DONE_STOP) && (!PExit.value)) state_TOKENLESS();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
