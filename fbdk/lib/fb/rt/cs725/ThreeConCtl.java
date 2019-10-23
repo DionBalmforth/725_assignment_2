@@ -182,8 +182,6 @@ public ThreeConCtl(){
     REQUEST_IN.connectTo(FC12.REQUEST_IN);
     FC12.REQUEST_OUT.connectTo(REQUEST_OUT);
     FC12.REPLY_OUT.connectTo(REPLY_OUT);
-    FC12.STOP.connectTo(FC11.CAS_STOP);
-    FC12.START.connectTo(FC11.CAS_START);
     MotoRotate3 = (BOOL)FC13.ovNamedNoException("MotoRotate");
     MotoRotate2 = (BOOL)FC12.ovNamedNoException("MotoRotate");
     MotoRotate1 = (BOOL)FC11.ovNamedNoException("MotoRotate");

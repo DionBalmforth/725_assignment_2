@@ -132,8 +132,8 @@ public class ConveyorCTLMulti extends FBInstance
 private static final int index_START = 0;
 private void state_START(){
   eccState = index_START;
-  CNF.serviceEvent(this);
   alg_START1();
+  CNF.serviceEvent(this);
 }
 private static final int index_INIT = 1;
 private void state_INIT(){
@@ -163,10 +163,6 @@ private void state_WANTED(){
 private static final int index_HELD = 4;
 private void state_HELD(){
   eccState = index_HELD;
-  alg_HELD_P();
-  CNF.serviceEvent(this);
-  alg_START();
-  START.serviceEvent(this);
 }
 private static final int index_NEW_BAG = 5;
 private void state_NEW_BAG(){
@@ -178,32 +174,29 @@ private void state_NEW_REQUEST(){
   eccState = index_NEW_REQUEST;
   alg_NEWREQUEST_P();
 }
-private static final int index_STOP = 7;
-private void state_STOP(){
-  eccState = index_STOP;
-  alg_STOP_P();
+private static final int index_NEW_REQUEST2 = 7;
+private void state_NEW_REQUEST2(){
+  eccState = index_NEW_REQUEST2;
+  alg_NEW_REQUEST2_P();
+}
+private static final int index_STOP2 = 8;
+private void state_STOP2(){
+  eccState = index_STOP2;
   alg_STOP();
   STOP.serviceEvent(this);
 }
-private static final int index_SEND1 = 8;
-private void state_SEND1(){
-  eccState = index_SEND1;
-  alg_SEND1_P();
+private static final int index_SEND2 = 9;
+private void state_SEND2(){
+  eccState = index_SEND2;
   REPLY_OUT.serviceEvent(this);
 state_WANTED();
 }
-private static final int index_NEW_REQUEST2 = 9;
-private void state_NEW_REQUEST2(){
-  eccState = index_NEW_REQUEST2;
-}
-private static final int index_STOP2 = 10;
-private void state_STOP2(){
-  eccState = index_STOP2;
-}
-private static final int index_SEND2 = 11;
-private void state_SEND2(){
-  eccState = index_SEND2;
-state_WANTED();
+private static final int index_HOLD = 10;
+private void state_HOLD(){
+  eccState = index_HOLD;
+  alg_HOLD_P();
+  alg_START();
+  START.serviceEvent(this);
 }
 /** The default constructor. */
 public ConveyorCTLMulti(){
@@ -228,14 +221,14 @@ public ConveyorCTLMulti(){
 /** Services the REQ event. */
   public void service_REQ(){
     if ((eccState == index_START) && (!PE.value)) state_WANTED();
-    else if ((eccState == index_HELD) && (!PE14.value)) state_START();
-    else if ((eccState == index_HELD) && (!PE.value)) state_NEW_BAG();
-    else if ((eccState == index_NEW_REQUEST) && (!PE.value)) state_STOP();
-    else if ((eccState == index_STOP) && (!PE14.value)) state_SEND1();
     else if ((eccState == index_NEW_REQUEST) && (!PE14.value)) state_SEND();
     else if ((eccState == index_NEW_REQUEST2) && (!PE.value)) state_STOP2();
     else if ((eccState == index_STOP2) && (!PE14.value)) state_SEND2();
     else if ((eccState == index_NEW_BAG) && (!PE14.value)) state_WANTED();
+    else if ((eccState == index_HOLD) && (PE.value)) state_HELD();
+    else if ((eccState == index_NEW_BAG) && (!PE.value)) state_HELD();
+    else if ((eccState == index_HELD) && (!PE14.value)) state_START();
+    else if ((eccState == index_NEW_REQUEST) && (!PE.value)) state_STOP2();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
@@ -245,13 +238,13 @@ public ConveyorCTLMulti(){
   }
 /** Services the REPLY_IN event. */
   public void service_REPLY_IN(){
-    if ((eccState == index_WANTED)) state_HELD();
+    if ((eccState == index_WANTED)) state_HOLD();
   }
 /** Services the REQUEST_IN event. */
   public void service_REQUEST_IN(){
     if ((eccState == index_START)) state_SEND();
-    else if ((eccState == index_HELD)) state_NEW_REQUEST();
     else if ((eccState == index_NEW_BAG)) state_NEW_REQUEST2();
+    else if ((eccState == index_HELD)) state_NEW_REQUEST();
   }
   /** ALGORITHM INIT IN ST*/
 public void alg_INIT(){
@@ -348,6 +341,16 @@ System.out.println("SEND1 STATE");
   /** ALGORITHM STOP_P IN Java*/
 public void alg_STOP_P(){
 System.out.println("STOP STATE");
+
+}
+  /** ALGORITHM HOLD_P IN Java*/
+public void alg_HOLD_P(){
+System.out.println("HOLD STATE");
+
+}
+  /** ALGORITHM NEW_REQUEST2_P IN Java*/
+public void alg_NEW_REQUEST2_P(){
+System.out.println("NEW_REQUEST2 STATE");
 
 }
 }

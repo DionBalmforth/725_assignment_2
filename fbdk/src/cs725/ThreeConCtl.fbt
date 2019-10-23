@@ -103,8 +103,6 @@
       <Connection Source="REQUEST_IN" Destination="FC12.REQUEST_IN" dx1="1338.8888" />
       <Connection Source="FC12.REQUEST_OUT" Destination="REQUEST_OUT" dx1="2683.3333" />
       <Connection Source="FC12.REPLY_OUT" Destination="REPLY_OUT" dx1="2638.8887" />
-      <Connection Source="FC12.STOP" Destination="FC11.CAS_STOP" dx1="83.33333" dx2="83.33333" dy="-994.4444" />
-      <Connection Source="FC12.START" Destination="FC11.CAS_START" dx1="88.888885" dx2="88.888885" dy="-1111.1111" />
     </EventConnections>
     <DataConnections>
       <Connection Source="FC13.MotoRotate" Destination="MotoRotate3" dx1="4022.2222" />
