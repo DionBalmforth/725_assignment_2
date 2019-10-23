@@ -45,7 +45,7 @@
       <ECState Name="AWAIT0" x="3047.0588" y="2088.2354" >
         <ECAction Algorithm="AWAIT0" />
       </ECState>
-      <ECState Name="AWAIT1" x="3029.4116" y="2900.0" >
+      <ECState Name="AWAIT1" x="3029.4116" y="2423.5293" >
         <ECAction Algorithm="AWAIT1" />
       </ECState>
       <ECTransition Source="NOREQUEST" Destination="GRANT0" Condition="Request0" x="2523.5293" y="1094.1177" />
@@ -54,8 +54,8 @@
       <ECTransition Source="GRANT1" Destination="NOREQUEST" Condition="Release1" x="4117.647" y="705.8823" />
       <ECTransition Source="GRANT0" Destination="AWAIT0" Condition="Request1" x="2488.2354" y="1770.5883" />
       <ECTransition Source="AWAIT0" Destination="GRANT1" Condition="Release0" x="3635.294" y="1776.4706" />
-      <ECTransition Source="GRANT1" Destination="AWAIT1" Condition="Request0" x="4117.647" y="2900.0" />
-      <ECTransition Source="AWAIT1" Destination="GRANT0" Condition="Release1" x="2017.647" y="2900.0" />
+      <ECTransition Source="GRANT1" Destination="AWAIT1" Condition="Request0" x="4117.647" y="2423.5293" />
+      <ECTransition Source="AWAIT1" Destination="GRANT0" Condition="Release1" x="2017.647" y="2423.5293" />
     </ECC>
   <Algorithm Name="GRANT0" Comment="Initialization algorithm" >
     <Other Language="Java" Text="System.out.println(&#34;Token Granted to 0&#34;);&#10;" />
