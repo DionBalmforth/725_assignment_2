@@ -78,30 +78,30 @@
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="REQUEST" x="2994.1177" y="811.7647" >
+      <ECState Name="REQUEST" x="5770.588" y="805.8823" >
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="CNF" />
         <ECAction Algorithm="REQUEST" Output="Request" />
       </ECState>
-      <ECState Name="EXCLUSION" x="2994.1177" y="1582.3529" >
+      <ECState Name="EXCLUSION" x="5770.588" y="1958.8235" >
         <ECAction Algorithm="START" Output="START" />
         <ECAction Algorithm="EXCLUSION" Output="CNF" />
       </ECState>
-      <ECState Name="RELEASE" x="1641.1764" y="2323.5293" >
+      <ECState Name="RELEASE" x="3211.7646" y="2670.5881" >
         <ECAction Algorithm="RELEASE" Output="Release" />
       </ECState>
-      <ECState Name="HOLD" x="1641.1764" y="1582.3529" >
+      <ECState Name="HOLD" x="3200.0" y="1958.8235" >
       </ECState>
-      <ECState Name="MULTIREQUEST" x="1652.9412" y="1352.9412" >
+      <ECState Name="MULTIREQUEST" x="3211.7646" y="1617.647" >
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Algorithm="MULTIREQUEST" />
       </ECState>
-      <ECState Name="MULTIRELEASE" x="1647.0588" y="811.7647" >
+      <ECState Name="MULTIRELEASE" x="3188.2354" y="805.8823" >
         <ECAction Algorithm="MULTIRELEASE" Output="Release" />
       </ECState>
-      <ECState Name="RELEASEINTERMEDIATE" x="1635.2941" y="1988.2352" >
+      <ECState Name="RELEASEINTERMEDIATE" x="3200.0" y="2270.5881" >
       </ECState>
-      <ECState Name="MULTIREQUESTINTERMEDIATE" x="1858.8235" y="1052.9412" >
+      <ECState Name="MULTIREQUESTINTERMEDIATE" x="3200.0" y="1247.0588" >
       </ECState>
       <ECTransition Source="START" Destination="INIT" Condition="INIT" x="1394.1177" y="423.52942" />
       <ECTransition Source="INIT" Destination="START" Condition="1" x="1147.0588" y="176.47058" />
@@ -111,16 +111,16 @@
       <ECTransition Source="CAS_START" Destination="START" Condition="1" x="852.94116" y="988.2353" />
       <ECTransition Source="START" Destination="CAS_STOP" Condition="CAS_STOP" x="1929.4117" y="241.17647" />
       <ECTransition Source="CAS_STOP" Destination="START" Condition="1" x="2052.9412" y="405.88235" />
-      <ECTransition Source="REQUEST" Destination="EXCLUSION" Condition="Grant" x="2994.1177" y="1194.1177" />
-      <ECTransition Source="HOLD" Destination="RELEASEINTERMEDIATE" Condition="REQ&#38;!ExitPE" x="1635.2941" y="1829.4117" />
-      <ECTransition Source="RELEASE" Destination="START" Condition="1" x="1394.1177" y="2323.5293" />
-      <ECTransition Source="START" Destination="REQUEST" Condition="REQ&#38;!EnterPE" x="2994.1177" y="617.64703" />
-      <ECTransition Source="EXCLUSION" Destination="HOLD" Condition="REQ&#38;EnterPE" x="2170.5881" y="1582.3529" />
-      <ECTransition Source="HOLD" Destination="MULTIREQUEST" Condition="REQ&#38;!EnterPE" x="1652.9412" y="1464.7058" />
-      <ECTransition Source="MULTIREQUEST" Destination="MULTIREQUESTINTERMEDIATE" Condition="REQ&#38;!ExitPE" x="1747.0588" y="1223.5294" />
-      <ECTransition Source="MULTIRELEASE" Destination="REQUEST" Condition="1" x="2770.5881" y="805.8823" />
-      <ECTransition Source="RELEASEINTERMEDIATE" Destination="RELEASE" Condition="REQ&#38;ExitPE" x="1641.1764" y="2152.9412" />
-      <ECTransition Source="MULTIREQUESTINTERMEDIATE" Destination="MULTIRELEASE" Condition="REQ&#38;ExitPE" x="1858.8235" y="952.94116" />
+      <ECTransition Source="REQUEST" Destination="EXCLUSION" Condition="Grant" x="5770.588" y="1429.4117" />
+      <ECTransition Source="HOLD" Destination="RELEASEINTERMEDIATE" Condition="REQ&#38;!ExitPE" x="3200.0" y="2117.647" />
+      <ECTransition Source="RELEASE" Destination="START" Condition="1" x="1394.1177" y="2670.5881" />
+      <ECTransition Source="START" Destination="REQUEST" Condition="REQ&#38;!EnterPE" x="5770.588" y="617.64703" />
+      <ECTransition Source="EXCLUSION" Destination="HOLD" Condition="REQ&#38;EnterPE" x="4176.4707" y="1958.8235" />
+      <ECTransition Source="HOLD" Destination="MULTIREQUEST" Condition="REQ&#38;!EnterPE" x="3211.7646" y="1823.5294" />
+      <ECTransition Source="MULTIREQUEST" Destination="MULTIREQUESTINTERMEDIATE" Condition="REQ&#38;!ExitPE" x="3200.0" y="1447.0588" />
+      <ECTransition Source="MULTIRELEASE" Destination="REQUEST" Condition="1" x="4952.941" y="805.8823" />
+      <ECTransition Source="RELEASEINTERMEDIATE" Destination="RELEASE" Condition="REQ&#38;ExitPE" x="3211.7646" y="2441.1765" />
+      <ECTransition Source="MULTIREQUESTINTERMEDIATE" Destination="MULTIRELEASE" Condition="REQ&#38;ExitPE" x="3188.2354" y="1023.5294" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
