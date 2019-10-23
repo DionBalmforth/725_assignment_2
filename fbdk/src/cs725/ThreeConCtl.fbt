@@ -19,6 +19,8 @@
         <With Var="Candidate" />
         <With Var="PE" />
       </Event>
+      <Event Name="TokenStatus_Input" >
+      </Event>
     </EventInputs>
     <EventOutputs>
       <Event Name="INITO" Comment="Initialization Confirm" >
@@ -37,6 +39,8 @@
       </Event>
       <Event Name="STOP" >
       </Event>
+      <Event Name="TokenStatus_Output" >
+      </Event>
     </EventOutputs>
     <InputVars>
       <VarDeclaration Name="Candidate" Type="BOOL" />
@@ -44,48 +48,56 @@
       <VarDeclaration Name="PE" Type="BOOL" />
       <VarDeclaration Name="PE1" Type="BOOL" />
       <VarDeclaration Name="PE2" Type="BOOL" />
+      <VarDeclaration Name="TokenInput" Type="BOOL" />
+      <VarDeclaration Name="PExit" Type="BOOL" />
     </InputVars>
     <OutputVars>
       <VarDeclaration Name="MotoRotate1" Type="BOOL" />
       <VarDeclaration Name="MotoRotate2" Type="BOOL" />
       <VarDeclaration Name="MotoRotate3" Type="BOOL" />
       <VarDeclaration Name="BlockCon" Type="BOOL" />
+      <VarDeclaration Name="TokenOutput" Type="BOOL" />
     </OutputVars>
   </InterfaceList>
   <FBNetwork >
-    <FB Name="FC11" Type="ConveyorCTL" x="235.29411" y="76.47059" />
-    <FB Name="FC12" Type="ConveyorCTL" x="1352.9412" y="688.2353" >
+    <FB Name="FC11" Type="RingTokenCTL" x="383.3333" y="127.77777" />
+    <FB Name="FC12" Type="ConveyorCTL" x="2405.5554" y="1033.3333" >
       <Parameter Name="Block" Value="0" />
       <Parameter Name="Candidate" Value="0" />
     </FB>
-    <FB Name="FC13" Type="ConveyorCTL" x="2552.9412" y="1894.1176" >
+    <FB Name="FC13" Type="ConveyorCTL" x="3733.3333" y="1744.4443" >
       <Parameter Name="Block" Value="0" />
       <Parameter Name="Candidate" Value="0" />
     </FB>
     <EventConnections>
-      <Connection Source="INIT" Destination="FC11.INIT" dx1="129.41176" />
-      <Connection Source="REQ" Destination="FC11.REQ" dx1="123.52941" />
-      <Connection Source="FC11.INITO" Destination="FC12.INIT" dx1="529.41174" />
-      <Connection Source="FC12.INITO" Destination="FC13.INIT" dx1="476.47058" />
-      <Connection Source="FC13.INITO" Destination="INITO" dx1="3247.0588" />
-      <Connection Source="FC13.CNF" Destination="CNF" dx1="3229.4116" />
-      <Connection Source="FC11.STOP" Destination="STOP" dx1="929.41174" />
-      <Connection Source="FC11.START" Destination="START" dx1="947.0588" />
-      <Connection Source="REQ" Destination="FC12.REQ" dx1="1241.1764" />
-      <Connection Source="REQ" Destination="FC13.REQ" dx1="2441.1765" />
-      <Connection Source="FC11.CNF" Destination="CNF" dx1="911.7647" />
-      <Connection Source="FC12.CNF" Destination="CNF" dx1="2029.4117" />
+      <Connection Source="INIT" Destination="FC11.INIT" dx1="277.77777" />
+      <Connection Source="REQ" Destination="FC11.REQ" dx1="272.2222" />
+      <Connection Source="FC11.INITO" Destination="FC12.INIT" dx1="644.4444" />
+      <Connection Source="FC12.INITO" Destination="FC13.INIT" dx1="477.77777" />
+      <Connection Source="FC13.INITO" Destination="INITO" dx1="4400.0" />
+      <Connection Source="FC13.CNF" Destination="CNF" dx1="4383.333" />
+      <Connection Source="FC11.STOP" Destination="STOP" dx1="1527.7777" />
+      <Connection Source="FC11.START" Destination="START" dx1="1544.4443" />
+      <Connection Source="REQ" Destination="FC12.REQ" dx1="2294.4443" />
+      <Connection Source="REQ" Destination="FC13.REQ" dx1="3622.2222" />
+      <Connection Source="FC11.CNF" Destination="CNF" dx1="1511.1111" />
+      <Connection Source="FC12.CNF" Destination="CNF" dx1="3055.5554" />
+      <Connection Source="FC11.TokenStatus_Output" Destination="TokenStatus_Output" dx1="1711.1111" />
+      <Connection Source="TokenStatus_Input" Destination="FC11.TokenStatus_Input" dx1="100.0" />
     </EventConnections>
     <DataConnections>
-      <Connection Source="FC13.MotoRotate" Destination="MotoRotate3" dx1="3358.8235" />
-      <Connection Source="FC12.MotoRotate" Destination="MotoRotate2" dx1="2158.8235" />
-      <Connection Source="FC11.MotoRotate" Destination="MotoRotate1" dx1="1041.1764" />
-      <Connection Source="PE" Destination="FC11.PE" dx1="152.94118" />
-      <Connection Source="PE1" Destination="FC12.PE" dx1="152.94118" />
-      <Connection Source="PE2" Destination="FC13.PE" dx1="152.94118" />
-      <Connection Source="Block" Destination="FC11.Block" dx1="105.882355" />
-      <Connection Source="FC11.BlockCon" Destination="BlockCon" dx1="988.2353" />
-      <Connection Source="Candidate" Destination="FC11.Candidate" dx1="41.176468" />
+      <Connection Source="FC13.MotoRotate" Destination="MotoRotate3" dx1="4488.8887" />
+      <Connection Source="FC12.MotoRotate" Destination="MotoRotate2" dx1="3161.111" />
+      <Connection Source="FC11.MotoRotate" Destination="MotoRotate1" dx1="1616.6666" />
+      <Connection Source="PE" Destination="FC11.PE" dx1="294.44443" />
+      <Connection Source="PE1" Destination="FC12.PE" dx1="2300.0" />
+      <Connection Source="PE2" Destination="FC13.PE" dx1="3627.7776" />
+      <Connection Source="Block" Destination="FC11.Block" dx1="266.66666" />
+      <Connection Source="FC11.BlockCon" Destination="BlockCon" dx1="1572.2222" />
+      <Connection Source="Candidate" Destination="FC11.Candidate" dx1="205.55554" />
+      <Connection Source="PExit" Destination="FC11.PExit" dx1="266.66666" />
+      <Connection Source="TokenInput" Destination="FC11.TokenInput" dx1="194.44444" />
+      <Connection Source="FC11.TokenOutput" Destination="TokenOutput" dx1="1616.6666" />
     </DataConnections>
   </FBNetwork>
 </FBType>

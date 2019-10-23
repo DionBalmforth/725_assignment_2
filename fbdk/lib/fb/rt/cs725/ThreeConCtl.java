@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ThreeConCtl
   * @author JHC
-  * @version 20191015/JHC
+  * @version 20191024/JHC
   */
 public class ThreeConCtl extends FBInstance
 {
@@ -19,6 +19,10 @@ public class ThreeConCtl extends FBInstance
   public BOOL PE1 = new BOOL();
 /** VAR PE2 */
   public BOOL PE2 = new BOOL();
+/** VAR TokenInput */
+  public BOOL TokenInput = new BOOL();
+/** VAR PExit */
+  public BOOL PExit = new BOOL();
 /** VAR MotoRotate1 */
   public BOOL MotoRotate1 = new BOOL();
 /** VAR MotoRotate2 */
@@ -27,10 +31,14 @@ public class ThreeConCtl extends FBInstance
   public BOOL MotoRotate3 = new BOOL();
 /** VAR BlockCon */
   public BOOL BlockCon = new BOOL();
+/** VAR TokenOutput */
+  public BOOL TokenOutput = new BOOL();
 /** Initialization Request */
  public EventOutput INIT = new EventOutput();
 /** Normal Execution Request */
  public EventOutput REQ = new EventOutput();
+/** EVENT TokenStatus_Input */
+ public EventOutput TokenStatus_Input = new EventOutput();
 /** Initialization Confirm */
  public EventOutput INITO = new EventOutput();
 /** Execution Confirmation */
@@ -39,6 +47,8 @@ public class ThreeConCtl extends FBInstance
  public EventOutput START = new EventOutput();
 /** EVENT STOP */
  public EventOutput STOP = new EventOutput();
+/** EVENT TokenStatus_Output */
+ public EventOutput TokenStatus_Output = new EventOutput();
 /** {@inheritDoc}
 * @param s {@inheritDoc}
 * @return {@inheritDoc}
@@ -46,6 +56,7 @@ public class ThreeConCtl extends FBInstance
   public EventServer eiNamed(String s){
     if("INIT".equals(s)) return INIT;
     if("REQ".equals(s)) return REQ;
+    if("TokenStatus_Input".equals(s)) return TokenStatus_Input;
     return super.eiNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -56,6 +67,7 @@ public class ThreeConCtl extends FBInstance
     if("CNF".equals(s)) return CNF;
     if("START".equals(s)) return START;
     if("STOP".equals(s)) return STOP;
+    if("TokenStatus_Output".equals(s)) return TokenStatus_Output;
     return super.eoNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -68,6 +80,8 @@ public class ThreeConCtl extends FBInstance
     if("PE".equals(s)) return PE;
     if("PE1".equals(s)) return PE1;
     if("PE2".equals(s)) return PE2;
+    if("TokenInput".equals(s)) return TokenInput;
+    if("PExit".equals(s)) return PExit;
     return super.ivNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -79,6 +93,7 @@ public class ThreeConCtl extends FBInstance
     if("MotoRotate2".equals(s)) return MotoRotate2;
     if("MotoRotate3".equals(s)) return MotoRotate3;
     if("BlockCon".equals(s)) return BlockCon;
+    if("TokenOutput".equals(s)) return TokenOutput;
     return super.ovNamed(s);}
 /** {@inheritDoc}
 * @param ivName {@inheritDoc}
@@ -91,6 +106,8 @@ public class ThreeConCtl extends FBInstance
     else if("PE".equals(ivName)) connect_PE((BOOL)newIV);
     else if("PE1".equals(ivName)) connect_PE1((BOOL)newIV);
     else if("PE2".equals(ivName)) connect_PE2((BOOL)newIV);
+    else if("TokenInput".equals(ivName)) connect_TokenInput((BOOL)newIV);
+    else if("PExit".equals(ivName)) connect_PExit((BOOL)newIV);
     else super.connectIV(ivName, newIV);
     }
 /** Connect the given variable to the input variable Candidate
@@ -133,8 +150,24 @@ public class ThreeConCtl extends FBInstance
     PE2 = newIV;
     FC13.connectIVNoException("PE",PE2);
     }
+/** Connect the given variable to the input variable TokenInput
+  * @param newIV The variable to connect
+  * @throws FBRManagementException An internal connection failed.
+ */
+  public void connect_TokenInput(BOOL newIV) throws FBRManagementException{
+    TokenInput = newIV;
+    FC11.connectIVNoException("TokenInput",TokenInput);
+    }
+/** Connect the given variable to the input variable PExit
+  * @param newIV The variable to connect
+  * @throws FBRManagementException An internal connection failed.
+ */
+  public void connect_PExit(BOOL newIV) throws FBRManagementException{
+    PExit = newIV;
+    FC11.connectIVNoException("PExit",PExit);
+    }
 /** FB FC11 */
-  protected ConveyorCTL FC11 = new ConveyorCTL() ;
+  protected RingTokenCTL FC11 = new RingTokenCTL() ;
 /** FB FC12 */
   protected ConveyorCTL FC12 = new ConveyorCTL() ;
 /** FB FC13 */
@@ -154,6 +187,8 @@ public ThreeConCtl(){
     REQ.connectTo(FC13.REQ);
     FC11.CNF.connectTo(CNF);
     FC12.CNF.connectTo(CNF);
+    FC11.TokenStatus_Output.connectTo(TokenStatus_Output);
+    TokenStatus_Input.connectTo(FC11.TokenStatus_Input);
     MotoRotate3 = (BOOL)FC13.ovNamedNoException("MotoRotate");
     MotoRotate2 = (BOOL)FC12.ovNamedNoException("MotoRotate");
     MotoRotate1 = (BOOL)FC11.ovNamedNoException("MotoRotate");
@@ -163,6 +198,9 @@ public ThreeConCtl(){
     FC11.connectIVNoException("Block",Block);
     BlockCon = (BOOL)FC11.ovNamedNoException("BlockCon");
     FC11.connectIVNoException("Candidate",Candidate);
+    FC11.connectIVNoException("PExit",PExit);
+    FC11.connectIVNoException("TokenInput",TokenInput);
+    TokenOutput = (BOOL)FC11.ovNamedNoException("TokenOutput");
     FC12.Block.initializeNoException("0");
     FC12.Candidate.initializeNoException("0");
     FC13.Block.initializeNoException("0");

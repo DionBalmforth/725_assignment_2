@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK RingTokenCTL
   * @author JHC
-  * @version 20191023/JHC
+  * @version 20191024/JHC
   */
 public class RingTokenCTL extends FBInstance
 {
@@ -141,6 +141,9 @@ private void state_TOKENLESS(){
   eccState = index_TOKENLESS;
   alg_TOKEN_FREE();
   TokenStatus_Output.serviceEvent(this);
+  alg_START();
+  START.serviceEvent(this);
+  CNF.serviceEvent(this);
 }
 private static final int index_INIT = 1;
 private void state_INIT(){
@@ -154,6 +157,7 @@ private static final int index_WAIT = 2;
 private void state_WAIT(){
   eccState = index_WAIT;
   alg_STOP();
+  STOP.serviceEvent(this);
   CNF.serviceEvent(this);
 }
 private static final int index_TOKENFUL = 3;
@@ -166,11 +170,23 @@ private static final int index_CRITICAL_SECTION = 4;
 private void state_CRITICAL_SECTION(){
   eccState = index_CRITICAL_SECTION;
   alg_START();
+  START.serviceEvent(this);
   CNF.serviceEvent(this);
 }
 private static final int index_DONE = 5;
 private void state_DONE(){
   eccState = index_DONE;
+}
+private static final int index_DONE_STOP = 6;
+private void state_DONE_STOP(){
+  eccState = index_DONE_STOP;
+  alg_STOP();
+  STOP.serviceEvent(this);
+  CNF.serviceEvent(this);
+}
+private static final int index_DONE_EXIT_WAIT = 7;
+private void state_DONE_EXIT_WAIT(){
+  eccState = index_DONE_EXIT_WAIT;
 }
 /** The default constructor. */
 public RingTokenCTL(){
@@ -197,7 +213,10 @@ public RingTokenCTL(){
     else if ((eccState == index_TOKENFUL) && (!PE.value)) state_CRITICAL_SECTION();
     else if ((eccState == index_TOKENFUL) && (PE.value)) state_TOKENLESS();
     else if ((eccState == index_CRITICAL_SECTION) && (PE.value)) state_DONE();
-    else if ((eccState == index_DONE) && (PExit.value)) state_TOKENLESS();
+    else if ((eccState == index_DONE) && (!PE.value)) state_DONE_STOP();
+    else if ((eccState == index_DONE) && (!PExit.value)) state_DONE_EXIT_WAIT();
+    else if ((eccState == index_DONE_STOP) && (!PExit.value)) state_DONE_EXIT_WAIT();
+    else if ((eccState == index_DONE_EXIT_WAIT) && (PExit.value)) state_TOKENLESS();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
