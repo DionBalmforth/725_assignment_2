@@ -103,20 +103,12 @@
       </ECState>
       <ECState Name="MULTIREQUESTINTERMEDIATE" x="3200.0" y="1247.0588" >
       </ECState>
-      <ECState Name="CAS_STOP1" x="5000.0" y="1447.0588" >
-        <ECAction Algorithm="STOP" Output="STOP" />
-        <ECAction Output="CNF" />
-      </ECState>
       <ECState Name="CAS_STOP2" x="2111.7646" y="1958.8235" >
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="CNF" />
       </ECState>
       <ECState Name="CAS_STOP3" x="2111.7646" y="2258.8235" >
         <ECAction Algorithm="STOP" Output="STOP" />
-        <ECAction Output="CNF" />
-      </ECState>
-      <ECState Name="CAS_START1" x="5247.0586" y="2352.9412" >
-        <ECAction Algorithm="START" Output="START" />
         <ECAction Output="CNF" />
       </ECState>
       <ECState Name="CAS_START3" x="4282.353" y="2276.4705" >
@@ -136,7 +128,6 @@
       <ECTransition Source="START" Destination="CAS_STOP" Condition="CAS_STOP" x="2094.1177" y="241.17647" />
       <ECTransition Source="CAS_STOP" Destination="START" Condition="1" x="2052.9412" y="405.88235" />
       <ECTransition Source="REQUEST" Destination="EXCLUSION" Condition="Grant" x="5770.588" y="1429.4117" />
-      <ECTransition Source="CAS_STOP1" Destination="EXCLUSION" Condition="1" x="4482.353" y="1447.0588" />
       <ECTransition Source="HOLD" Destination="RELEASEINTERMEDIATE" Condition="REQ&#38;!ExitPE" x="3200.0" y="2117.647" />
       <ECTransition Source="RELEASE" Destination="START" Condition="1" x="1394.1177" y="2670.5881" />
       <ECTransition Source="START" Destination="REQUEST" Condition="REQ&#38;!EnterPE" x="5770.588" y="617.64703" />
@@ -146,9 +137,6 @@
       <ECTransition Source="MULTIRELEASE" Destination="REQUEST" Condition="1" x="4952.941" y="805.8823" />
       <ECTransition Source="RELEASEINTERMEDIATE" Destination="RELEASE" Condition="REQ&#38;ExitPE" x="3211.7646" y="2441.1765" />
       <ECTransition Source="MULTIREQUESTINTERMEDIATE" Destination="MULTIRELEASE" Condition="REQ&#38;ExitPE" x="3188.2354" y="1023.5294" />
-      <ECTransition Source="EXCLUSION" Destination="CAS_STOP1" Condition="CAS_STOP" x="5317.647" y="1647.0588" />
-      <ECTransition Source="EXCLUSION" Destination="CAS_START1" Condition="CAS_START" x="5247.0586" y="2823.5293" />
-      <ECTransition Source="CAS_START1" Destination="EXCLUSION" Condition="1" x="5247.0586" y="2164.7058" />
       <ECTransition Source="HOLD" Destination="CAS_START2" Condition="CAS_START" x="2611.7646" y="1782.3529" />
       <ECTransition Source="HOLD" Destination="CAS_STOP2" Condition="CAS_STOP" x="2641.1765" y="1958.8235" />
       <ECTransition Source="RELEASEINTERMEDIATE" Destination="CAS_STOP3" Condition="CAS_STOP" x="2529.4116" y="2258.8235" />
