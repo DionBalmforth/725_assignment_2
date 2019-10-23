@@ -96,11 +96,13 @@
         <ECAction Algorithm="START" Output="START" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="DONE" Comment="Leaving critical section" x="3222.2222" y="1694.4443" >
+      <ECState Name="DONE" Comment="Leaving critical section" x="3549.9998" y="2188.889" >
       </ECState>
-      <ECState Name="DONE_STOP" Comment="If another one comes behind then stop the conveyor" x="3611.111" y="1244.4443" >
+      <ECState Name="DONE_STOP" Comment="If another one comes behind then stop the conveyor" x="4827.778" y="1344.4443" >
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="DONE_EXIT_WAIT" x="3249.9998" y="1294.4443" >
       </ECState>
       <ECTransition Source="INIT" Destination="TOKENLESS" Condition="1" x="1766.6666" y="366.66666" />
       <ECTransition Source="TOKENLESS" Destination="WAIT" Condition="REQ&#38;!PE" Comment="tick and photoeye sensor" x="1088.8888" y="1088.8888" />
@@ -108,11 +110,12 @@
       <ECTransition Source="TOKENFUL" Destination="CRITICAL_SECTION" Condition="REQ&#38;!PE" Comment="needs token so go into critical section" x="1644.4443" y="2383.3333" />
       <ECTransition Source="TOKENLESS" Destination="TOKENFUL" Condition="TokenStatus_Input&#38;TokenInput" Comment="receives the token" x="1388.8888" y="1266.6666" />
       <ECTransition Source="TOKENFUL" Destination="TOKENLESS" Condition="REQ&#38;PE" Comment="Token not needed" x="1949.9999" y="1427.7777" />
-      <ECTransition Source="CRITICAL_SECTION" Destination="DONE" Condition="REQ&#38;PE" Comment="No longer being sensed by photo eye" x="2661.111" y="2055.5554" />
-      <ECTransition Source="DONE" Destination="TOKENLESS" Condition="REQ&#38;!PExit" x="2166.6665" y="1266.6666" />
+      <ECTransition Source="CRITICAL_SECTION" Destination="DONE" Condition="REQ&#38;PE" Comment="No longer being sensed by photo eye" x="2550.0" y="2294.4443" />
       <ECTransition Source="TOKENLESS" Destination="INIT" Condition="INIT" x="1988.8888" y="422.2222" />
-      <ECTransition Source="DONE" Destination="DONE_STOP" Condition="REQ&#38;!PE" x="3527.7776" y="1544.4443" />
-      <ECTransition Source="DONE_STOP" Destination="TOKENLESS" Condition="REQ&#38;!PExit" x="2455.5554" y="1122.2222" />
+      <ECTransition Source="DONE" Destination="DONE_STOP" Condition="REQ&#38;!PE" x="4211.111" y="1855.5555" />
+      <ECTransition Source="DONE" Destination="DONE_EXIT_WAIT" Condition="REQ&#38;!PExit" x="3349.9998" y="1594.4443" />
+      <ECTransition Source="DONE_STOP" Destination="DONE_EXIT_WAIT" Condition="REQ&#38;!PExit" x="3999.9998" y="1294.4443" />
+      <ECTransition Source="DONE_EXIT_WAIT" Destination="TOKENLESS" Condition="REQ&#38;PExit" x="2205.5554" y="1172.2222" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />

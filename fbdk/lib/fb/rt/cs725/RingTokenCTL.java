@@ -184,6 +184,10 @@ private void state_DONE_STOP(){
   STOP.serviceEvent(this);
   CNF.serviceEvent(this);
 }
+private static final int index_DONE_EXIT_WAIT = 7;
+private void state_DONE_EXIT_WAIT(){
+  eccState = index_DONE_EXIT_WAIT;
+}
 /** The default constructor. */
 public RingTokenCTL(){
     super();
@@ -209,9 +213,10 @@ public RingTokenCTL(){
     else if ((eccState == index_TOKENFUL) && (!PE.value)) state_CRITICAL_SECTION();
     else if ((eccState == index_TOKENFUL) && (PE.value)) state_TOKENLESS();
     else if ((eccState == index_CRITICAL_SECTION) && (PE.value)) state_DONE();
-    else if ((eccState == index_DONE) && (!PExit.value)) state_TOKENLESS();
     else if ((eccState == index_DONE) && (!PE.value)) state_DONE_STOP();
-    else if ((eccState == index_DONE_STOP) && (!PExit.value)) state_TOKENLESS();
+    else if ((eccState == index_DONE) && (!PExit.value)) state_DONE_EXIT_WAIT();
+    else if ((eccState == index_DONE_STOP) && (!PExit.value)) state_DONE_EXIT_WAIT();
+    else if ((eccState == index_DONE_EXIT_WAIT) && (PExit.value)) state_TOKENLESS();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
