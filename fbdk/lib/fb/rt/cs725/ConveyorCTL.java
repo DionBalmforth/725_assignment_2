@@ -1,11 +1,11 @@
-/* Copyright (c)2018 Rockwell Automation. All rights reserved. */
+/* Copyright (c)2019 Rockwell Automation. All rights reserved. */
 package fb.rt.cs725;
 import fb.datatype.*;
 import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ConveyorCTL
   * @author JHC
-  * @version 20180924/JHC
+  * @version 20191023/JHC
   */
 public class ConveyorCTL extends FBInstance
 {
@@ -182,33 +182,6 @@ System.out.println(MotoRotate.value);
 }
   /** ALGORITHM REQ IN ST*/
 public void alg_REQ(){
-System.out.println(this+" -> Candidate"+Candidate.value);
-if(Candidate.value){
-if(lastPE.value!=PE.value){
-if(!PE.value){
-BlockCon.value=true;
-System.out.println("BlockCon = true");
-}
-else{
-BlockCon.value=false;
-System.out.println("BlockCon = false");
-}
-lastPE.value=PE.value;
-}
-if(lastBlock.value!=Block.value){
-if(Block.value){
-STOP.serviceEvent(this);
-MotoRotate.value=false;
-System.out.println("Cas Stop");
-}
-else{
-START.serviceEvent(this);
-MotoRotate.value=true;
-System.out.println("Cas Start");
-}
-lastBlock.value=Block.value;
-}
-}
 }
   /** ALGORITHM START IN ST*/
 public void alg_START(){

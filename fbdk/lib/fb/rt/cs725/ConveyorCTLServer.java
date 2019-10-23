@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ConveyorCTLServer
   * @author JHC
-  * @version 20191021/JHC
+  * @version 20191023/JHC
   */
 public class ConveyorCTLServer extends FBInstance
 {

@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ThreeConCtl
   * @author JHC
-  * @version 20191022/JHC
+  * @version 20191023/JHC
   */
 public class ThreeConCtl extends FBInstance
 {
@@ -180,8 +180,10 @@ public ThreeConCtl(){
     FC12.CNF.connectTo(CNF);
     REPLY_IN.connectTo(FC12.REPLY_IN);
     REQUEST_IN.connectTo(FC12.REQUEST_IN);
-    FC12.REPLY_OUT.connectTo(REPLY_OUT);
     FC12.REQUEST_OUT.connectTo(REQUEST_OUT);
+    FC12.REPLY_OUT.connectTo(REPLY_OUT);
+    FC12.STOP.connectTo(FC11.CAS_STOP);
+    FC12.START.connectTo(FC11.CAS_START);
     MotoRotate3 = (BOOL)FC13.ovNamedNoException("MotoRotate");
     MotoRotate2 = (BOOL)FC12.ovNamedNoException("MotoRotate");
     MotoRotate1 = (BOOL)FC11.ovNamedNoException("MotoRotate");

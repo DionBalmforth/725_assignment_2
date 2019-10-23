@@ -132,8 +132,6 @@ public class ConveyorCTLMulti extends FBInstance
 private static final int index_START = 0;
 private void state_START(){
   eccState = index_START;
-  alg_START();
-  START.serviceEvent(this);
   CNF.serviceEvent(this);
 }
 private static final int index_INIT = 1;
@@ -148,14 +146,15 @@ private static final int index_SEND = 2;
 private void state_SEND(){
   eccState = index_SEND;
   REPLY_OUT.serviceEvent(this);
+  CNF.serviceEvent(this);
 state_START();
 }
 private static final int index_WANTED = 3;
 private void state_WANTED(){
   eccState = index_WANTED;
-  REQUEST_OUT.serviceEvent(this);
   alg_STOP();
   STOP.serviceEvent(this);
+  REQUEST_OUT.serviceEvent(this);
   CNF.serviceEvent(this);
 }
 private static final int index_HELD = 4;
@@ -255,5 +254,9 @@ MotoRotate.value=false;
 System.out.println(this+" Stop "+MotoRotate.value);
 
 System.out.println("Stop "+MotoRotate.value);
+}
+  /** ALGORITHM print IN ST*/
+public void alg_print(){
+System.out.println(this+"IM here");
 }
 }

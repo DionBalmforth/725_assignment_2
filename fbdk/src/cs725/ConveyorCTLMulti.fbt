@@ -10,10 +10,10 @@
   <InterfaceList>
     <EventInputs>
       <Event Name="INIT" Comment="Initialization Request" >
-        <With Var="PE" />
         <With Var="Block" />
         <With Var="Candidate" />
         <With Var="PE14" />
+        <With Var="PE" />
       </Event>
       <Event Name="REQ" Comment="Normal Execution Request" >
         <With Var="PE" />
@@ -45,12 +45,16 @@
         <With Var="BlockCon" />
       </Event>
       <Event Name="STOP" >
+        <With Var="MotoRotate" />
       </Event>
       <Event Name="START" >
+        <With Var="MotoRotate" />
       </Event>
       <Event Name="REPLY_OUT" >
+        <With Var="MotoRotate" />
       </Event>
       <Event Name="REQUEST_OUT" >
+        <With Var="MotoRotate" />
       </Event>
     </EventOutputs>
     <InputVars>
@@ -70,33 +74,33 @@
       <VarDeclaration Name="lastBlock" Type="BOOL" InitialValue="0" />
     </InternalVars>
     <ECC >
-      <ECState Name="START" Comment="Initial State" x="877.7778" y="644.4444" >
-        <ECAction Algorithm="START" Output="START" />
+      <ECState Name="START" Comment="Initial State" x="733.3333" y="683.3333" >
         <ECAction Output="CNF" />
       </ECState>
       <ECState Name="INIT" Comment="Initialization" x="244.44443" y="155.55554" >
         <ECAction Algorithm="INIT" Output="INITO" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="SEND" x="1805.5555" y="338.8889" >
+      <ECState Name="SEND" x="1338.8888" y="227.77777" >
         <ECAction Output="REPLY_OUT" />
-      </ECState>
-      <ECState Name="WANTED" x="1633.3333" y="922.22217" >
-        <ECAction Output="REQUEST_OUT" />
-        <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECState Name="HELD" x="1633.3333" y="1472.2222" >
+      <ECState Name="WANTED" x="1438.8888" y="1183.3333" >
+        <ECAction Algorithm="STOP" Output="STOP" />
+        <ECAction Output="REQUEST_OUT" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="HELD" x="1450.0" y="1805.5555" >
         <ECAction Algorithm="START" Output="START" />
         <ECAction Output="CNF" />
       </ECState>
-      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="683.3333" y="505.55554" />
-      <ECTransition Source="INIT" Destination="START" Condition="1" x="249.99998" y="650.0" />
-      <ECTransition Source="START" Destination="SEND" Condition="REQUEST_IN" x="1144.4445" y="438.8889" />
-      <ECTransition Source="SEND" Destination="START" Condition="1" x="872.22217" y="255.55554" />
-      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE" x="1133.3333" y="927.7778" />
-      <ECTransition Source="WANTED" Destination="HELD" Condition="REPLY_IN" x="1633.3333" y="1194.4445" />
-      <ECTransition Source="HELD" Destination="START" Condition="REQ&#38;!PE14" x="883.3333" y="1477.7777" />
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="394.44443" y="361.11108" />
+      <ECTransition Source="INIT" Destination="START" Condition="1" x="244.44443" y="683.3333" />
+      <ECTransition Source="WANTED" Destination="HELD" Condition="REPLY_IN" x="1455.5555" y="1427.7777" />
+      <ECTransition Source="START" Destination="SEND" Condition="REQUEST_IN" x="1144.4445" y="477.77777" />
+      <ECTransition Source="SEND" Destination="START" Condition="1" x="855.55554" y="361.11108" />
+      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE" x="1122.2222" y="938.88885" />
+      <ECTransition Source="HELD" Destination="START" Condition="REQ&#38;!PE14" x="733.3333" y="1805.5555" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
@@ -109,6 +113,9 @@
   </Algorithm>
   <Algorithm Name="STOP" >
     <ST Text="MotoRotate := FALSE;&#10;System.out.println(this + &#34; Stop &#34; + MotoRotate);&#10;&#10;System.out.println(&#34;Stop &#34; + MotoRotate);&#10;" />
+  </Algorithm>
+  <Algorithm Name="print" >
+    <ST Text="System.out.println(this + &#34;IM here&#34;);&#10;" />
   </Algorithm>
   </BasicFB>
 </FBType>

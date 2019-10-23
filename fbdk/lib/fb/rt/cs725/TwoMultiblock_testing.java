@@ -3,20 +3,18 @@ package fb.rt.cs725;
 import fb.datatype.*;
 import fb.rt.*;
 import fb.rt.events.*;
-/** FUNCTION_BLOCK TwoConCtlServer
+/** FUNCTION_BLOCK TwoMultiblock_testing
   * @author JHC
   * @version 20191023/JHC
   */
-public class TwoConCtlServer extends FBInstance
+public class TwoMultiblock_testing extends FBInstance
 {
 /** VAR Candidate */
   public BOOL Candidate = new BOOL();
 /** VAR Block */
   public BOOL Block = new BOOL();
-/** VAR EnterPE */
-  public BOOL EnterPE = new BOOL();
-/** VAR ExitPE */
-  public BOOL ExitPE = new BOOL();
+/** VAR PE */
+  public BOOL PE = new BOOL();
 /** VAR MotoRotate1 */
   public BOOL MotoRotate1 = new BOOL();
 /** VAR MotoRotate2 */
@@ -31,16 +29,10 @@ public class TwoConCtlServer extends FBInstance
  public EventOutput START = new EventOutput();
 /** EVENT STOP */
  public EventOutput STOP = new EventOutput();
-/** EVENT Grant */
- public EventOutput Grant = new EventOutput();
 /** Initialization Confirm */
  public EventOutput INITO = new EventOutput();
 /** Execution Confirmation */
  public EventOutput CNF = new EventOutput();
-/** EVENT Request */
- public EventOutput Request = new EventOutput();
-/** EVENT Release */
- public EventOutput Release = new EventOutput();
 /** {@inheritDoc}
 * @param s {@inheritDoc}
 * @return {@inheritDoc}
@@ -50,7 +42,6 @@ public class TwoConCtlServer extends FBInstance
     if("REQ".equals(s)) return REQ;
     if("START".equals(s)) return START;
     if("STOP".equals(s)) return STOP;
-    if("Grant".equals(s)) return Grant;
     return super.eiNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -59,8 +50,6 @@ public class TwoConCtlServer extends FBInstance
   public EventOutput eoNamed(String s){
     if("INITO".equals(s)) return INITO;
     if("CNF".equals(s)) return CNF;
-    if("Request".equals(s)) return Request;
-    if("Release".equals(s)) return Release;
     return super.eoNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -70,8 +59,7 @@ public class TwoConCtlServer extends FBInstance
   public ANY ivNamed(String s) throws FBRManagementException{
     if("Candidate".equals(s)) return Candidate;
     if("Block".equals(s)) return Block;
-    if("EnterPE".equals(s)) return EnterPE;
-    if("ExitPE".equals(s)) return ExitPE;
+    if("PE".equals(s)) return PE;
     return super.ivNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -91,8 +79,7 @@ public class TwoConCtlServer extends FBInstance
     throws FBRManagementException{
     if("Candidate".equals(ivName)) connect_Candidate((BOOL)newIV);
     else if("Block".equals(ivName)) connect_Block((BOOL)newIV);
-    else if("EnterPE".equals(ivName)) connect_EnterPE((BOOL)newIV);
-    else if("ExitPE".equals(ivName)) connect_ExitPE((BOOL)newIV);
+    else if("PE".equals(ivName)) connect_PE((BOOL)newIV);
     else super.connectIV(ivName, newIV);
     }
 /** Connect the given variable to the input variable Candidate
@@ -111,46 +98,38 @@ public class TwoConCtlServer extends FBInstance
     Block = newIV;
     FC12.connectIVNoException("Block",Block);
     }
-/** Connect the given variable to the input variable EnterPE
+/** Connect the given variable to the input variable PE
   * @param newIV The variable to connect
   * @throws FBRManagementException An internal connection failed.
  */
-  public void connect_EnterPE(BOOL newIV) throws FBRManagementException{
-    EnterPE = newIV;
-    FC12.connectIVNoException("EnterPE",EnterPE);
-    }
-/** Connect the given variable to the input variable ExitPE
-  * @param newIV The variable to connect
-  * @throws FBRManagementException An internal connection failed.
- */
-  public void connect_ExitPE(BOOL newIV) throws FBRManagementException{
-    ExitPE = newIV;
-    FC12.connectIVNoException("ExitPE",ExitPE);
+  public void connect_PE(BOOL newIV) throws FBRManagementException{
+    PE = newIV;
+    FC12.connectIVNoException("PE",PE);
     }
 /** FB FC11 */
-  protected ConveyorCTL FC11 = new ConveyorCTL() ;
+  protected ConveyorCTLMulti FC11 = new ConveyorCTLMulti() ;
 /** FB FC12 */
-  protected ConveyorCTLServer FC12 = new ConveyorCTLServer() ;
+  protected ConveyorCTLMulti FC12 = new ConveyorCTLMulti() ;
 /** The default constructor. */
-public TwoConCtlServer(){
+public TwoMultiblock_testing(){
     super();
     INIT.connectTo(FC11.INIT);
     REQ.connectTo(FC11.REQ);
     FC12.INITO.connectTo(INITO);
     FC12.CNF.connectTo(CNF);
-    FC12.Request.connectTo(Request);
-    FC12.Release.connectTo(Release);
     REQ.connectTo(FC12.REQ);
     STOP.connectTo(FC12.CAS_STOP);
     START.connectTo(FC12.CAS_START);
-    Grant.connectTo(FC12.Grant);
     FC12.STOP.connectTo(FC11.CAS_STOP);
     FC12.START.connectTo(FC11.CAS_START);
     FC11.INITO.connectTo(FC12.INIT);
+    FC11.REPLY_OUT.connectTo(FC12.REPLY_IN);
+    FC11.REQUEST_OUT.connectTo(FC12.REQUEST_IN);
+    FC12.REPLY_OUT.connectTo(FC11.REPLY_IN);
+    FC12.REQUEST_OUT.connectTo(FC11.REQUEST_IN);
     FC12.connectIVNoException("Block",Block);
     FC12.connectIVNoException("Candidate",Candidate);
-    FC12.connectIVNoException("EnterPE",EnterPE);
-    FC12.connectIVNoException("ExitPE",ExitPE);
+    FC12.connectIVNoException("PE",PE);
     BlockCon = (BOOL)FC12.ovNamedNoException("BlockCon");
     MotoRotate1 = (BOOL)FC11.ovNamedNoException("MotoRotate");
     MotoRotate2 = (BOOL)FC12.ovNamedNoException("MotoRotate");
