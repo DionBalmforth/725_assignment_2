@@ -211,6 +211,38 @@ private static final int index_MULTIREQUESTINTERMEDIATE = 12;
 private void state_MULTIREQUESTINTERMEDIATE(){
   eccState = index_MULTIREQUESTINTERMEDIATE;
 }
+private static final int index_CAS_STOP2 = 13;
+private void state_CAS_STOP2(){
+  eccState = index_CAS_STOP2;
+  alg_STOP();
+  STOP.serviceEvent(this);
+  CNF.serviceEvent(this);
+state_HOLD();
+}
+private static final int index_CAS_STOP3 = 14;
+private void state_CAS_STOP3(){
+  eccState = index_CAS_STOP3;
+  alg_STOP();
+  STOP.serviceEvent(this);
+  CNF.serviceEvent(this);
+state_RELEASEINTERMEDIATE();
+}
+private static final int index_CAS_START3 = 15;
+private void state_CAS_START3(){
+  eccState = index_CAS_START3;
+  alg_START();
+  START.serviceEvent(this);
+  CNF.serviceEvent(this);
+state_RELEASEINTERMEDIATE();
+}
+private static final int index_CAS_START2 = 16;
+private void state_CAS_START2(){
+  eccState = index_CAS_START2;
+  alg_START();
+  START.serviceEvent(this);
+  CNF.serviceEvent(this);
+state_HOLD();
+}
 /** The default constructor. */
 public ConveyorCTLServer(){
     super();
@@ -244,10 +276,14 @@ public ConveyorCTLServer(){
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
     if ((eccState == index_START)) state_CAS_STOP();
+    else if ((eccState == index_HOLD)) state_CAS_STOP2();
+    else if ((eccState == index_RELEASEINTERMEDIATE)) state_CAS_STOP3();
   }
 /** Services the CAS_START event. */
   public void service_CAS_START(){
     if ((eccState == index_START)) state_CAS_START();
+    else if ((eccState == index_HOLD)) state_CAS_START2();
+    else if ((eccState == index_RELEASEINTERMEDIATE)) state_CAS_START3();
   }
 /** Services the Grant event. */
   public void service_Grant(){
