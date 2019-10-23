@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK CentralServer
   * @author JHC
-  * @version 20191020/JHC
+  * @version 20191023/JHC
   */
 public class CentralServer extends FBInstance
 {
