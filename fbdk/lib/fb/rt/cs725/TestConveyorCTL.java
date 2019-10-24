@@ -3,11 +3,11 @@ package fb.rt.cs725;
 import fb.datatype.*;
 import fb.rt.*;
 import fb.rt.events.*;
-/** FUNCTION_BLOCK ConveyorCTL
+/** FUNCTION_BLOCK TestConveyorCTL
   * @author JHC
-  * @version 20191024/JHC
+  * @version 20191022/JHC
   */
-public class ConveyorCTL extends FBInstance
+public class TestConveyorCTL extends FBInstance
 {
 /** Input event qualifier */
   public BOOL PE = new BOOL();
@@ -143,7 +143,7 @@ private void state_CAS_STOP(){
 state_START();
 }
 /** The default constructor. */
-public ConveyorCTL(){
+public TestConveyorCTL(){
     super();
     lastPE.initializeNoException("1");
     lastBlock.initializeNoException("0");
@@ -182,6 +182,33 @@ System.out.println(MotoRotate.value);
 }
   /** ALGORITHM REQ IN ST*/
 public void alg_REQ(){
+System.out.println(this+" -> Candidate"+Candidate.value);
+if(Candidate.value){
+if(lastPE.value!=PE.value){
+if(!PE.value){
+BlockCon.value=true;
+System.out.println("BlockCon = true");
+}
+else{
+BlockCon.value=false;
+System.out.println("BlockCon = false");
+}
+lastPE.value=PE.value;
+}
+if(lastBlock.value!=Block.value){
+if(Block.value){
+STOP.serviceEvent(this);
+MotoRotate.value=false;
+System.out.println("Cas Stop");
+}
+else{
+START.serviceEvent(this);
+MotoRotate.value=true;
+System.out.println("Cas Start");
+}
+lastBlock.value=Block.value;
+}
+}
 }
   /** ALGORITHM START IN ST*/
 public void alg_START(){
@@ -196,5 +223,10 @@ MotoRotate.value=false;
 System.out.println(this+" Stop "+MotoRotate.value);
 
 System.out.println("Stop "+MotoRotate.value);
+}
+  /** ALGORITHM sum IN Java*/
+public void alg_sum(){
+System.out.println("hello");
+
 }
 }

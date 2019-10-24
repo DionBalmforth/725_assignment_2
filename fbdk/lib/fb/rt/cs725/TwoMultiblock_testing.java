@@ -3,11 +3,11 @@ package fb.rt.cs725;
 import fb.datatype.*;
 import fb.rt.*;
 import fb.rt.events.*;
-/** FUNCTION_BLOCK TwoConCtl
+/** FUNCTION_BLOCK TwoMultiblock_testing
   * @author JHC
-  * @version 20191024/JHC
+  * @version 20191023/JHC
   */
-public class TwoConCtl extends FBInstance
+public class TwoMultiblock_testing extends FBInstance
 {
 /** VAR Candidate */
   public BOOL Candidate = new BOOL();
@@ -107,11 +107,11 @@ public class TwoConCtl extends FBInstance
     FC12.connectIVNoException("PE",PE);
     }
 /** FB FC11 */
-  protected ConveyorCTL FC11 = new ConveyorCTL() ;
+  protected ConveyorCTLMulti FC11 = new ConveyorCTLMulti() ;
 /** FB FC12 */
-  protected ConveyorCTL FC12 = new ConveyorCTL() ;
+  protected ConveyorCTLMulti FC12 = new ConveyorCTLMulti() ;
 /** The default constructor. */
-public TwoConCtl(){
+public TwoMultiblock_testing(){
     super();
     INIT.connectTo(FC11.INIT);
     REQ.connectTo(FC11.REQ);
@@ -123,6 +123,10 @@ public TwoConCtl(){
     FC12.STOP.connectTo(FC11.CAS_STOP);
     FC12.START.connectTo(FC11.CAS_START);
     FC11.INITO.connectTo(FC12.INIT);
+    FC11.REPLY_OUT.connectTo(FC12.REPLY_IN);
+    FC11.REQUEST_OUT.connectTo(FC12.REQUEST_IN);
+    FC12.REPLY_OUT.connectTo(FC11.REPLY_IN);
+    FC12.REQUEST_OUT.connectTo(FC11.REQUEST_IN);
     FC12.connectIVNoException("Block",Block);
     FC12.connectIVNoException("Candidate",Candidate);
     FC12.connectIVNoException("PE",PE);

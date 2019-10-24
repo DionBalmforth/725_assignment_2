@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="ConveyorCTLMulti" Comment="Basic Function Block Type" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2003-12-04" Remarks="Renamed for better indexing." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-11-05" Remarks="Corrected missing ST element in Algorithm REQ." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2000-05-30" />
+  <CompilerInfo header="package fb.rt.cs725;" >
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" >
+        <With Var="Block" />
+        <With Var="Candidate" />
+        <With Var="PE14" />
+        <With Var="PE" />
+      </Event>
+      <Event Name="REQ" Comment="Normal Execution Request" >
+        <With Var="PE" />
+        <With Var="Block" />
+        <With Var="Candidate" />
+        <With Var="PE14" />
+      </Event>
+      <Event Name="CAS_STOP" >
+      </Event>
+      <Event Name="CAS_START" >
+      </Event>
+      <Event Name="REPLY_IN" >
+        <With Var="PE14" />
+        <With Var="PE" />
+        <With Var="Block" />
+      </Event>
+      <Event Name="REQUEST_IN" >
+        <With Var="PE" />
+        <With Var="Block" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="MotoRotate" />
+        <With Var="BlockCon" />
+      </Event>
+      <Event Name="CNF" Comment="Execution Confirmation" >
+        <With Var="MotoRotate" />
+        <With Var="BlockCon" />
+      </Event>
+      <Event Name="STOP" >
+        <With Var="MotoRotate" />
+      </Event>
+      <Event Name="START" >
+        <With Var="MotoRotate" />
+      </Event>
+      <Event Name="REPLY_OUT" >
+        <With Var="MotoRotate" />
+      </Event>
+      <Event Name="REQUEST_OUT" >
+        <With Var="MotoRotate" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="PE" Type="BOOL" Comment="Input event qualifier" />
+      <VarDeclaration Name="Block" Type="BOOL" />
+      <VarDeclaration Name="Candidate" Type="BOOL" />
+      <VarDeclaration Name="PE14" Type="BOOL" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="MotoRotate" Type="BOOL" Comment="Output event qualifier" />
+      <VarDeclaration Name="BlockCon" Type="BOOL" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <InternalVars>
+      <VarDeclaration Name="lastPE" Type="BOOL" InitialValue="1" />
+      <VarDeclaration Name="lastBlock" Type="BOOL" InitialValue="0" />
+    </InternalVars>
+    <ECC >
+      <ECState Name="START" Comment="Initial State" x="1744.4443" y="733.3333" >
+        <ECAction Algorithm="START1" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="INIT" Comment="Initialization" x="1005.55554" y="294.44443" >
+        <ECAction Algorithm="INIT" Output="INITO" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="SEND" x="4016.6665" y="288.8889" >
+        <ECAction Algorithm="SEND_P" />
+        <ECAction Output="REPLY_OUT" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="WANTED" x="2755.5554" y="1111.1111" >
+        <ECAction Algorithm="WANTED_P" />
+        <ECAction Algorithm="STOP" Output="STOP" />
+        <ECAction Output="REQUEST_OUT" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="NEW_BAG" x="849.99994" y="2861.111" >
+        <ECAction Algorithm="NEWBAG_P" />
+      </ECState>
+      <ECState Name="NEW_REQUEST" x="3699.9998" y="2888.8887" >
+        <ECAction Algorithm="NEWREQUEST_P" />
+      </ECState>
+      <ECState Name="SEND2" x="844.4444" y="1111.1111" >
+        <ECAction Algorithm="SEND_P" />
+        <ECAction Output="REPLY_OUT" />
+      </ECState>
+      <ECState Name="STOP2" x="849.99994" y="1933.3333" >
+        <ECAction Algorithm="STOP_P" />
+        <ECAction Algorithm="STOP" Output="STOP" />
+      </ECState>
+      <ECState Name="HOLD" x="2772.2222" y="1761.1111" >
+        <ECAction Algorithm="START" Output="START" />
+        <ECAction Algorithm="HOLD_P" />
+      </ECState>
+      <ECState Name="STOP1" x="4361.111" y="2411.111" >
+        <ECAction Algorithm="STOP_P" />
+        <ECAction Algorithm="STOP" Output="STOP" />
+      </ECState>
+      <ECState Name="SEND1" x="4361.111" y="1899.9999" >
+        <ECAction Algorithm="SEND1_P" />
+        <ECAction Output="REPLY_OUT" />
+      </ECState>
+      <ECState Name="HELD" x="2777.7776" y="2283.3333" >
+      </ECState>
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="1266.6666" y="538.88885" />
+      <ECTransition Source="INIT" Destination="START" Condition="1" x="1005.55554" y="733.3333" />
+      <ECTransition Source="START" Destination="SEND" Condition="REQUEST_IN" x="1944.4443" y="400.0" />
+      <ECTransition Source="SEND" Destination="START" Condition="1" x="1744.4443" y="288.8889" />
+      <ECTransition Source="START" Destination="WANTED" Condition="REQ&#38;!PE" x="2755.5554" y="727.7778" />
+      <ECTransition Source="NEW_REQUEST" Destination="SEND" Condition="REQ&#38;!PE14" x="4016.6665" y="1688.8888" />
+      <ECTransition Source="STOP2" Destination="SEND2" Condition="REQ&#38;!PE14" x="849.99994" y="1416.6666" />
+      <ECTransition Source="SEND2" Destination="WANTED" Condition="1" x="1955.5554" y="1111.1111" />
+      <ECTransition Source="WANTED" Destination="HOLD" Condition="REPLY_IN" x="2772.2222" y="1372.2222" />
+      <ECTransition Source="STOP1" Destination="SEND1" Condition="REQ&#38;!PE14" x="4361.111" y="2188.889" />
+      <ECTransition Source="SEND1" Destination="WANTED" Condition="1" x="4361.111" y="1105.5555" />
+      <ECTransition Source="NEW_BAG" Destination="STOP2" Condition="REQUEST_IN" x="849.99994" y="2500.0" />
+      <ECTransition Source="NEW_REQUEST" Destination="STOP1" Condition="REQ&#38;!PE" x="4361.111" y="2711.111" />
+      <ECTransition Source="HOLD" Destination="HELD" Condition="REQ&#38;PE" x="2777.7776" y="2022.2222" />
+      <ECTransition Source="NEW_BAG" Destination="HELD" Condition="REQ&#38;!PE" x="2500.0" y="2861.111" />
+      <ECTransition Source="HELD" Destination="NEW_REQUEST" Condition="REQUEST_IN" x="2966.6665" y="2888.8887" />
+      <ECTransition Source="HELD" Destination="START" Condition="REQ&#38;!PE14" x="1744.4443" y="2283.3333" />
+      <ECTransition Source="START" Destination="SEND" Condition="REQ&#38;PE" x="2094.4443" y="505.55554" />
+    </ECC>
+  <Algorithm Name="INIT" Comment="Initialization algorithm" >
+    <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
+  </Algorithm>
+  <Algorithm Name="REQ" Comment="Normally executed algorithm" >
+    <ST Text="System.out.println(this +  &#34; -> Candidate&#34; + Candidate);&#10;IF Candidate THEN&#10;IF lastPE !:= PE THEN&#10;IF NOT PE THEN&#10;BlockCon:= TRUE;&#10;System.out.println(&#34;BlockCon = true&#34;);&#10;ELSE&#10;BlockCon:=FALSE;&#10;System.out.println(&#34;BlockCon = false&#34;);&#10;END_IF&#10;lastPE := PE;&#10;END_IF&#10;IF lastBlock !:= Block THEN&#10;IF Block THEN&#10;STOP.serviceEvent(this);&#10;MotoRotate := FALSE;&#10;System.out.println(&#34;Cas Stop&#34;);&#10;ELSE&#10;START.serviceEvent(this);&#10;MotoRotate := TRUE;&#10;System.out.println(&#34;Cas Start&#34;);&#10;END_IF&#10;lastBlock := Block;&#10;END_IF&#10;END_IF&#10;" />
+  </Algorithm>
+  <Algorithm Name="START" >
+    <ST Text="MotoRotate:=TRUE;&#10;System.out.println(this + &#34; Start &#34; + MotoRotate);&#10;&#10;System.out.println(&#34;Start &#34; + MotoRotate);&#10;&#10;System.out.println(&#34;ENTERING CRITICAL SECTION&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="STOP" >
+    <ST Text="MotoRotate := FALSE;&#10;System.out.println(this + &#34; Stop &#34; + MotoRotate);&#10;&#10;System.out.println(&#34;Stop &#34; + MotoRotate);&#10;System.out.println(&#34;IN WAITING&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="print" >
+    <ST Text="System.out.println(this + &#34;IM here&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="START1" >
+    <Other Language="Java" Text="System.out.println(&#34;START STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="SEND_P" >
+    <Other Language="Java" Text="System.out.println(&#34;SEND STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="WANTED_P" >
+    <Other Language="Java" Text="System.out.println(&#34;WANTED STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="HELD_P" >
+    <Other Language="Java" Text="System.out.println(&#34;HELD STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="NEWBAG_P" >
+    <Other Language="Java" Text="System.out.println(&#34;NEWBAG STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="NEWREQUEST_P" >
+    <Other Language="Java" Text="System.out.println(&#34;NEWREQUEST STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="SEND1_P" >
+    <Other Language="Java" Text="System.out.println(&#34;SEND1 STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="STOP_P" >
+    <Other Language="Java" Text="System.out.println(&#34;STOP STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="HOLD_P" >
+    <Other Language="Java" Text="System.out.println(&#34;HOLD STATE&#34;);&#10;" />
+  </Algorithm>
+  <Algorithm Name="NEW_REQUEST2_P" >
+    <Other Language="Java" Text="System.out.println(&#34;NEW_REQUEST2 STATE&#34;);&#10;" />
+  </Algorithm>
+  </BasicFB>
+</FBType>
