@@ -24,12 +24,6 @@
       <Event Name="Grant1" Comment="Execution Confirmation" >
       </Event>
     </EventOutputs>
-    <InputVars>
-      <VarDeclaration Name="InToken0" Type="BOOL" Comment="Input event qualifier" />
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Name="OutToken0" Type="BOOL" Comment="Output event qualifier" />
-    </OutputVars>
   </InterfaceList>
   <BasicFB>
     <ECC >

@@ -9,10 +9,6 @@ import fb.rt.events.*;
   */
 public class CentralServer extends FBInstance
 {
-/** Input event qualifier */
-  public BOOL InToken0 = new BOOL();
-/** Output event qualifier */
-  public BOOL OutToken0 = new BOOL();
 /** Initialization Request */
  public EventServer Request0 = new EventInput(this);
 /** dab */
@@ -43,37 +39,6 @@ public class CentralServer extends FBInstance
     if("Grant0".equals(s)) return Grant0;
     if("Grant1".equals(s)) return Grant1;
     return super.eoNamed(s);}
-/** {@inheritDoc}
-* @param s {@inheritDoc}
-* @return {@inheritDoc}
-* @throws FBRManagementException {@inheritDoc}
-*/
-  public ANY ivNamed(String s) throws FBRManagementException{
-    if("InToken0".equals(s)) return InToken0;
-    return super.ivNamed(s);}
-/** {@inheritDoc}
-* @param s {@inheritDoc}
-* @return {@inheritDoc}
-* @throws FBRManagementException {@inheritDoc}
-*/
-  public ANY ovNamed(String s) throws FBRManagementException{
-    if("OutToken0".equals(s)) return OutToken0;
-    return super.ovNamed(s);}
-/** {@inheritDoc}
-* @param ivName {@inheritDoc}
-* @param newIV {@inheritDoc}
-* @throws FBRManagementException {@inheritDoc} */
-  public void connectIV(String ivName, ANY newIV)
-    throws FBRManagementException{
-    if("InToken0".equals(ivName)) connect_InToken0((BOOL)newIV);
-    else super.connectIV(ivName, newIV);
-    }
-/** Connect the given variable to the input variable InToken0
-  * @param newIV The variable to connect
- */
-  public void connect_InToken0(BOOL newIV){
-    InToken0 = newIV;
-    }
 private static final int index_NOREQUEST = 0;
 private void state_NOREQUEST(){
   eccState = index_NOREQUEST;
