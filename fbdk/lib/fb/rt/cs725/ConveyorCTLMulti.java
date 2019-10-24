@@ -25,6 +25,8 @@ public class ConveyorCTLMulti extends FBInstance
   public BOOL lastPE = new BOOL();
 /** VAR lastBlock */
   public BOOL lastBlock = new BOOL();
+/** VAR StoreEmit */
+  public BOOL StoreEmit = new BOOL();
 /** Initialization Request */
  public EventServer INIT = new EventInput(this);
 /** Normal Execution Request */
@@ -134,6 +136,7 @@ private void state_START(){
   eccState = index_START;
   alg_START1();
   CNF.serviceEvent(this);
+    if(StoreEmit.value) state_SEND();
 }
 private static final int index_INIT = 1;
 private void state_INIT(){
@@ -163,6 +166,8 @@ private void state_WANTED(){
 private static final int index_NEW_BAG = 4;
 private void state_NEW_BAG(){
   eccState = index_NEW_BAG;
+  alg_STOP();
+  STOP.serviceEvent(this);
   alg_NEWBAG_P();
 }
 private static final int index_NEW_REQUEST = 5;
@@ -181,8 +186,6 @@ private static final int index_STOP2 = 7;
 private void state_STOP2(){
   eccState = index_STOP2;
   alg_STOP_P();
-  alg_STOP();
-  STOP.serviceEvent(this);
 }
 private static final int index_HOLD = 8;
 private void state_HOLD(){
@@ -209,11 +212,22 @@ private static final int index_HELD = 11;
 private void state_HELD(){
   eccState = index_HELD;
 }
+private static final int index_HOLD_REQUEST = 12;
+private void state_HOLD_REQUEST(){
+  eccState = index_HOLD_REQUEST;
+  alg_Plz();
+state_WANTED();
+}
+private static final int index_sdfgh = 13;
+private void state_sdfgh(){
+  eccState = index_sdfgh;
+}
 /** The default constructor. */
 public ConveyorCTLMulti(){
     super();
     lastPE.initializeNoException("1");
     lastBlock.initializeNoException("0");
+    StoreEmit.initializeNoException("0");
   }
 /** {@inheritDoc}
 * @param e {@inheritDoc} */
@@ -237,8 +251,9 @@ public ConveyorCTLMulti(){
     else if ((eccState == index_STOP1) && (!PE14.value)) state_SEND1();
     else if ((eccState == index_NEW_REQUEST) && (!PE.value)) state_STOP1();
     else if ((eccState == index_HOLD) && (PE.value)) state_HELD();
-    else if ((eccState == index_NEW_BAG) && (!PE.value)) state_HELD();
+    else if ((eccState == index_HELD) && (!PE.value)) state_NEW_BAG();
     else if ((eccState == index_HELD) && (!PE14.value)) state_START();
+    else if ((eccState == index_NEW_BAG) && (!PE14.value)) state_WANTED();
     else if ((eccState == index_START) && (PE.value)) state_SEND();
   }
 /** Services the CAS_STOP event. */
@@ -256,6 +271,7 @@ public ConveyorCTLMulti(){
     if ((eccState == index_START)) state_SEND();
     else if ((eccState == index_NEW_BAG)) state_STOP2();
     else if ((eccState == index_HELD)) state_NEW_REQUEST();
+    else if ((eccState == index_WANTED)) state_HOLD_REQUEST();
   }
   /** ALGORITHM INIT IN ST*/
 public void alg_INIT(){
@@ -365,5 +381,13 @@ System.out.println("HOLD STATE");
 public void alg_NEW_REQUEST2_P(){
 System.out.println("NEW_REQUEST2 STATE");
 
+}
+  /** ALGORITHM Plz IN ST*/
+public void alg_Plz(){
+StoreEmit.value=true;
+}
+  /** ALGORITHM not_plz IN ST*/
+public void alg_not_plz(){
+StoreEmit.value=false;
 }
 }
