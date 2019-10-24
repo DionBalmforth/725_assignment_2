@@ -59,6 +59,10 @@ public class ThreeConCtl extends FBInstance
  public EventOutput REQUEST_OUT = new EventOutput();
 /** EVENT TokenStatus_Output */
  public EventOutput TokenStatus_Output = new EventOutput();
+/** EVENT Cascade_Stop */
+ public EventOutput Cascade_Stop = new EventOutput();
+/** EVENT Cascade_Start */
+ public EventOutput Cascade_Start = new EventOutput();
 /** {@inheritDoc}
 * @param s {@inheritDoc}
 * @return {@inheritDoc}
@@ -82,6 +86,8 @@ public class ThreeConCtl extends FBInstance
     if("REPLY_OUT".equals(s)) return REPLY_OUT;
     if("REQUEST_OUT".equals(s)) return REQUEST_OUT;
     if("TokenStatus_Output".equals(s)) return TokenStatus_Output;
+    if("Cascade_Stop".equals(s)) return Cascade_Stop;
+    if("Cascade_Start".equals(s)) return Cascade_Start;
     return super.eoNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -205,8 +211,6 @@ public ThreeConCtl(){
     FC12.INITO.connectTo(FC13.INIT);
     FC13.INITO.connectTo(INITO);
     FC13.CNF.connectTo(CNF);
-    FC11.STOP.connectTo(STOP);
-    FC11.START.connectTo(START);
     REQ.connectTo(FC12.REQ);
     REQ.connectTo(FC13.REQ);
     FC11.CNF.connectTo(CNF);
@@ -217,6 +221,12 @@ public ThreeConCtl(){
     FC12.REPLY_OUT.connectTo(REPLY_OUT);
     FC11.TokenStatus_Output.connectTo(TokenStatus_Output);
     TokenStatus_Input.connectTo(FC11.TokenStatus_Input);
+    FC12.STOP.connectTo(FC11.CAS_STOP);
+    FC12.START.connectTo(FC11.CAS_START);
+    FC11.STOP.connectTo(STOP);
+    FC11.START.connectTo(START);
+    FC12.STOP.connectTo(Cascade_Stop);
+    FC12.START.connectTo(Cascade_Start);
     MotoRotate3 = (BOOL)FC13.ovNamedNoException("MotoRotate");
     MotoRotate2 = (BOOL)FC12.ovNamedNoException("MotoRotate");
     MotoRotate1 = (BOOL)FC11.ovNamedNoException("MotoRotate");

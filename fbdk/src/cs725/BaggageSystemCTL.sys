@@ -187,7 +187,7 @@
           <Parameter Name="Candidate" Value="0" />
           <Parameter Name="Block" Value="0" />
         </FB>
-        <FB Name="FCTwo" Type="TwoConCtlRingToken" x="2394.4443" y="2277.7776" >
+        <FB Name="FCTwo" Type="TwoConCtlRingToken" x="2211.111" y="2077.7776" >
           <Parameter Name="Candidate" Value="1" />
         </FB>
         <FB Name="TCOne" Type="ThreeConCtl" x="4288.8887" y="2338.889" >
@@ -223,11 +223,11 @@
           <Connection Source="BagInTwo.INITO" Destination="BagIn2.INIT" dx1="44.444443" />
           <Connection Source="PE.IND" Destination="FCTwo.REQ" dx1="333.3333" dx2="129.41176" dy="-2205.8823" />
           <Connection Source="PE.IND" Destination="TCOne.REQ" dx1="1294.4443" dx2="126.666664" dy="-2206.6665" />
-          <Connection Source="TCOne.CNF" Destination="ConControl.REQ" dx1="27.777777" dx2="5.5555553" dy="-3399.9998" />
+          <Connection Source="TCOne.CNF" Destination="ConControl.REQ" dx1="44.444443" dx2="5.5555553" dy="-3399.9998" />
           <Connection Source="FCThree.CNF" Destination="ConControl.REQ" dx1="2272.2222" />
           <Connection Source="TCOne.START" Destination="FCOne.START" dx1="116.666664" dx2="72.22222" dy="-2672.2222" />
           <Connection Source="TCOne.STOP" Destination="FCOne.STOP" dx1="66.666664" dx2="122.22221" dy="-2783.3333" />
-          <Connection Source="TCOne.START" Destination="FCThree.START" dx1="27.777777" dx2="127.77777" dy="-2672.2222" />
+          <Connection Source="TCOne.START" Destination="FCThree.START" dx1="33.333332" dx2="127.77777" dy="-2672.2222" />
           <Connection Source="TCOne.STOP" Destination="FCThree.STOP" dx1="27.777777" dx2="72.22222" dy="-2783.3333" />
           <Connection Source="BagInTwo.IND" Destination="BagIn2.REQ" dx1="44.444443" />
           <Connection Source="PE.IND" Destination="FCOne.REQ" dx1="177.77777" dx2="129.41176" dy="-2205.8823" />
@@ -263,6 +263,8 @@
           <Connection Source="FCFour.REQUEST_OUT" Destination="TCOne.REQUEST_IN" dx1="499.99997" />
           <Connection Source="FCTwo.TokenStatus_Output" Destination="TCOne.TokenStatus_Input" dx1="150.0" />
           <Connection Source="TCOne.TokenStatus_Output" Destination="FCTwo.TokenStatus_Input" dx1="138.88889" dx2="133.33333" dy="-1466.6666" />
+          <Connection Source="TCOne.Cascade_Stop" Destination="FCTwo.STOP" dx1="194.44444" dx2="72.22222" dy="-3233.3333" />
+          <Connection Source="TCOne.Cascade_Start" Destination="FCTwo.START" dx1="166.66666" dx2="33.333332" dy="-3344.4443" />
         </EventConnections>
         <DataConnections>
           <Connection Source="FCTwo.BlockCon" Destination="TCOne.Block" dx1="266.66666" />
