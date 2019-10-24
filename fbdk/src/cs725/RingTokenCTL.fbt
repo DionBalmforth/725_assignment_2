@@ -104,7 +104,7 @@
       </ECState>
       <ECState Name="DONE_EXIT_WAIT" x="3249.9998" y="1294.4443" >
       </ECState>
-      <ECState Name="TOKENLESS_CASCSTOP" x="650.0" y="655.55554" >
+      <ECState Name="TOKENLESS_CASCSTOP" x="511.11108" y="411.11108" >
         <ECAction Algorithm="STOP" Output="STOP" />
         <ECAction Output="CNF" />
       </ECState>
@@ -140,8 +140,6 @@
       <ECTransition Source="DONE" Destination="DONE_EXIT_WAIT" Condition="REQ&#38;!PExit" x="3349.9998" y="1594.4443" />
       <ECTransition Source="DONE_STOP" Destination="DONE_EXIT_WAIT" Condition="REQ&#38;!PExit" x="3999.9998" y="1294.4443" />
       <ECTransition Source="DONE_EXIT_WAIT" Destination="TOKENLESS" Condition="REQ&#38;PExit" x="2205.5554" y="1172.2222" />
-      <ECTransition Source="TOKENLESS" Destination="TOKENLESS_CASCSTOP" Condition="CAS_STOP" x="872.22217" y="944.4444" />
-      <ECTransition Source="TOKENLESS_CASCSTOP" Destination="TOKENLESS" Condition="CAS_START" x="1050.0" y="366.66666" />
       <ECTransition Source="CRITICAL_SECTION" Destination="CRITSEC_CASCSTOP" Condition="CAS_STOP" x="988.88885" y="3233.3333" />
       <ECTransition Source="CRITSEC_CASCSTOP" Destination="CRITICAL_SECTION" Condition="CAS_START" x="616.6666" y="2616.6665" />
       <ECTransition Source="DONE" Destination="DONE_CASCSTOP" Condition="CAS_STOP" x="3561.111" y="2433.3333" />
@@ -152,6 +150,8 @@
       <ECTransition Source="DEW_CASCSTOP" Destination="DONE_EXIT_WAIT" Condition="1" x="3433.3333" y="938.88885" />
       <ECTransition Source="DONE_EXIT_WAIT" Destination="DEW_CASCSTART" Condition="CAS_START" x="3605.5554" y="1055.5555" />
       <ECTransition Source="DEW_CASCSTART" Destination="DONE_EXIT_WAIT" Condition="1" x="3811.111" y="1172.2222" />
+      <ECTransition Source="TOKENLESS" Destination="TOKENLESS_CASCSTOP" Condition="CAS_STOP" x="722.22217" y="794.4444" />
+      <ECTransition Source="TOKENLESS_CASCSTOP" Destination="TOKENLESS" Condition="CAS_START" x="1150.0" y="144.44444" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />

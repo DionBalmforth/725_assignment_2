@@ -205,8 +205,6 @@ public ThreeConCtl(){
     FC12.INITO.connectTo(FC13.INIT);
     FC13.INITO.connectTo(INITO);
     FC13.CNF.connectTo(CNF);
-    FC11.STOP.connectTo(STOP);
-    FC11.START.connectTo(START);
     REQ.connectTo(FC12.REQ);
     REQ.connectTo(FC13.REQ);
     FC11.CNF.connectTo(CNF);
@@ -219,6 +217,8 @@ public ThreeConCtl(){
     TokenStatus_Input.connectTo(FC11.TokenStatus_Input);
     FC12.STOP.connectTo(FC11.CAS_STOP);
     FC12.START.connectTo(FC11.CAS_START);
+    FC12.START.connectTo(START);
+    FC12.STOP.connectTo(STOP);
     MotoRotate3 = (BOOL)FC13.ovNamedNoException("MotoRotate");
     MotoRotate2 = (BOOL)FC12.ovNamedNoException("MotoRotate");
     MotoRotate1 = (BOOL)FC11.ovNamedNoException("MotoRotate");

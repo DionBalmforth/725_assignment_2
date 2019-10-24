@@ -266,17 +266,17 @@ public RingTokenCTL(){
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
-    if ((eccState == index_TOKENLESS)) state_TOKENLESS_CASCSTOP();
-    else if ((eccState == index_CRITICAL_SECTION)) state_CRITSEC_CASCSTOP();
+    if ((eccState == index_CRITICAL_SECTION)) state_CRITSEC_CASCSTOP();
     else if ((eccState == index_DONE)) state_DONE_CASCSTOP();
     else if ((eccState == index_DONE_EXIT_WAIT)) state_DEW_CASCSTOP();
+    else if ((eccState == index_TOKENLESS)) state_TOKENLESS_CASCSTOP();
   }
 /** Services the CAS_START event. */
   public void service_CAS_START(){
-    if ((eccState == index_TOKENLESS_CASCSTOP)) state_TOKENLESS();
-    else if ((eccState == index_CRITSEC_CASCSTOP)) state_CRITICAL_SECTION();
+    if ((eccState == index_CRITSEC_CASCSTOP)) state_CRITICAL_SECTION();
     else if ((eccState == index_DONE)) state_DONE_CASCSTART();
     else if ((eccState == index_DONE_EXIT_WAIT)) state_DEW_CASCSTART();
+    else if ((eccState == index_TOKENLESS_CASCSTOP)) state_TOKENLESS();
   }
 /** Services the TokenStatus_Input event. */
   public void service_TokenStatus_Input(){

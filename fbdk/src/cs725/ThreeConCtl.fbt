@@ -100,8 +100,6 @@
       <Connection Source="FC12.INITO" Destination="FC13.INIT" dx1="477.77777" />
       <Connection Source="FC13.INITO" Destination="INITO" dx1="5100.0" />
       <Connection Source="FC13.CNF" Destination="CNF" dx1="5083.333" />
-      <Connection Source="FC11.STOP" Destination="STOP" dx1="1527.7777" />
-      <Connection Source="FC11.START" Destination="START" dx1="1544.4443" />
       <Connection Source="REQ" Destination="FC12.REQ" dx1="2194.4443" />
       <Connection Source="REQ" Destination="FC13.REQ" dx1="4322.222" />
       <Connection Source="FC11.CNF" Destination="CNF" dx1="1511.1111" />
@@ -114,6 +112,8 @@
       <Connection Source="TokenStatus_Input" Destination="FC11.TokenStatus_Input" dx1="100.0" />
       <Connection Source="FC12.STOP" Destination="FC11.CAS_STOP" dx1="200.0" dx2="200.0" dy="-1561.1111" />
       <Connection Source="FC12.START" Destination="FC11.CAS_START" dx1="211.1111" dx2="211.1111" dy="-1683.3333" />
+      <Connection Source="FC12.START" Destination="START" dx1="3249.9998" />
+      <Connection Source="FC12.STOP" Destination="STOP" dx1="3233.3333" />
     </EventConnections>
     <DataConnections>
       <Connection Source="FC13.MotoRotate" Destination="MotoRotate3" dx1="5188.8887" />
