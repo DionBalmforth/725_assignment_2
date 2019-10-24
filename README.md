@@ -2,15 +2,15 @@
 
 ## Usage
 - Unzip the folder
-- navigate into the folder labelled fbdk
-- if on windows 
+- Navigate into the folder labelled fbdk
+- If on windows 
     - double click the editor.jar or editor.bat
-- if on linux or mac
+- If on linux or mac
     - open terminal in the fbdk folder and then run "java -jar editor.jar"
-- accept and enter the program
-- click the folder in the top left and select the BaggageSystemCtl from the src folder
-- click the green play button
-    - if any errors occur then recompile EVERYTHING, quit then re-enter
+- Accept and enter the program
+- Click the folder in the top left and select the BaggageSystemCtl from the src folder
+- Click the green play button
+    - if any errors occur then recompile EVERYTHING, quit the program and then re-enter
 
 
 ## Notes
