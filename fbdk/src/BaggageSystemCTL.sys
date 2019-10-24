@@ -253,7 +253,7 @@
           <Connection Source="FCOne.Release" Destination="Server.Release0" dx1="27.777777" />
           <Connection Source="Server.Grant0" Destination="FCOne.Grant" dx1="27.777777" dx2="200.0" dy="-372.2222" />
           <Connection Source="FCThree.Request" Destination="Server.Request1" dx1="27.777777" dx2="72.22222" dy="-372.2222" />
-          <Connection Source="FCThree.Release" Destination="Server.Release1" dx1="27.777777" dx2="0.0" dy="-722.22217" />
+          <Connection Source="FCThree.Release" Destination="Server.Release1" dx1="27.777777" dx2="0.0" dy="-483.3333" />
           <Connection Source="Server.Grant1" Destination="FCThree.Grant" dx1="27.777777" dx2="200.0" dy="-370.58823" />
           <Connection Source="FCFour.REPLY_OUT" Destination="TCOne.REPLY_IN" dx1="427.77777" />
           <Connection Source="TCOne.REPLY_OUT" Destination="FCFour.REPLY_IN" dx1="333.3333" dx2="105.55555" dy="-2900.0" />
@@ -263,6 +263,8 @@
           <Connection Source="FCFour.REQUEST_OUT" Destination="TCOne.REQUEST_IN" dx1="499.99997" />
           <Connection Source="FCTwo.TokenStatus_Output" Destination="TCOne.TokenStatus_Input" dx1="150.0" />
           <Connection Source="TCOne.TokenStatus_Output" Destination="FCTwo.TokenStatus_Input" dx1="138.88889" dx2="133.33333" dy="-1466.6666" />
+          <Connection Source="TCOne.STOP" Destination="FCTwo.STOP" dx1="27.777777" dx2="88.888885" dy="-2783.3333" />
+          <Connection Source="TCOne.START" Destination="FCTwo.START" dx1="27.777777" dx2="66.666664" dy="-2666.6665" />
         </EventConnections>
         <DataConnections>
           <Connection Source="FCTwo.BlockCon" Destination="TCOne.Block" dx1="266.66666" />

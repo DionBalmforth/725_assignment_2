@@ -104,6 +104,30 @@
       </ECState>
       <ECState Name="DONE_EXIT_WAIT" x="3249.9998" y="1294.4443" >
       </ECState>
+      <ECState Name="TOKENLESS_CASCSTOP" x="650.0" y="655.55554" >
+        <ECAction Algorithm="STOP" Output="STOP" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="CRITSEC_CASCSTOP" x="449.99997" y="2888.8887" >
+        <ECAction Algorithm="STOP" Output="STOP" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="DONE_CASCSTOP" x="3561.111" y="2688.8887" >
+        <ECAction Algorithm="STOP" Output="STOP" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="DONE_CASCSTART" x="4727.778" y="2377.7776" >
+        <ECAction Algorithm="START" Output="START" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="DEW_CASCSTOP" x="3749.9998" y="572.2222" >
+        <ECAction Algorithm="STOP" Output="STOP" />
+        <ECAction Output="CNF" />
+      </ECState>
+      <ECState Name="DEW_CASCSTART" x="4111.111" y="927.7778" >
+        <ECAction Algorithm="START" Output="START" />
+        <ECAction Output="CNF" />
+      </ECState>
       <ECTransition Source="INIT" Destination="TOKENLESS" Condition="1" x="1766.6666" y="366.66666" />
       <ECTransition Source="TOKENLESS" Destination="WAIT" Condition="REQ&#38;!PE" Comment="tick and photoeye sensor" x="1088.8888" y="1088.8888" />
       <ECTransition Source="WAIT" Destination="CRITICAL_SECTION" Condition="TokenStatus_Input&#38;TokenInput" Comment="token status changed nd token availabale" x="938.88885" y="2255.5554" />
@@ -116,6 +140,18 @@
       <ECTransition Source="DONE" Destination="DONE_EXIT_WAIT" Condition="REQ&#38;!PExit" x="3349.9998" y="1594.4443" />
       <ECTransition Source="DONE_STOP" Destination="DONE_EXIT_WAIT" Condition="REQ&#38;!PExit" x="3999.9998" y="1294.4443" />
       <ECTransition Source="DONE_EXIT_WAIT" Destination="TOKENLESS" Condition="REQ&#38;PExit" x="2205.5554" y="1172.2222" />
+      <ECTransition Source="TOKENLESS" Destination="TOKENLESS_CASCSTOP" Condition="CAS_STOP" x="872.22217" y="944.4444" />
+      <ECTransition Source="TOKENLESS_CASCSTOP" Destination="TOKENLESS" Condition="CAS_START" x="1050.0" y="366.66666" />
+      <ECTransition Source="CRITICAL_SECTION" Destination="CRITSEC_CASCSTOP" Condition="CAS_STOP" x="988.88885" y="3233.3333" />
+      <ECTransition Source="CRITSEC_CASCSTOP" Destination="CRITICAL_SECTION" Condition="CAS_START" x="616.6666" y="2616.6665" />
+      <ECTransition Source="DONE" Destination="DONE_CASCSTOP" Condition="CAS_STOP" x="3561.111" y="2433.3333" />
+      <ECTransition Source="DONE_CASCSTOP" Destination="DONE" Condition="1" x="3116.6665" y="2494.4443" />
+      <ECTransition Source="DONE" Destination="DONE_CASCSTART" Condition="CAS_START" x="4200.0" y="2188.889" />
+      <ECTransition Source="DONE_CASCSTART" Destination="DONE" Condition="1" x="3999.9998" y="2377.7776" />
+      <ECTransition Source="DONE_EXIT_WAIT" Destination="DEW_CASCSTOP" Condition="CAS_STOP" x="3249.9998" y="838.88885" />
+      <ECTransition Source="DEW_CASCSTOP" Destination="DONE_EXIT_WAIT" Condition="1" x="3433.3333" y="938.88885" />
+      <ECTransition Source="DONE_EXIT_WAIT" Destination="DEW_CASCSTART" Condition="CAS_START" x="3605.5554" y="1055.5555" />
+      <ECTransition Source="DEW_CASCSTART" Destination="DONE_EXIT_WAIT" Condition="1" x="3811.111" y="1172.2222" />
     </ECC>
   <Algorithm Name="INIT" Comment="Initialization algorithm" >
     <ST Text="MotoRotate := TRUE;&#10;Block := FALSE;&#10;&#10;System.out.println(this + &#34; &#34; + MotoRotate);&#10;System.out.println(MotoRotate);&#10;" />
