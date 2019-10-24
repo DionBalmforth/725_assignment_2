@@ -10,7 +10,7 @@
 - accept and enter the program
 - click the folder in the top left and select the BaggageSystemCtl from the src folder
 - click the green play button
-    - if any errors occur then recompile EVERYTHING, quite then re-enter
+    - if any errors occur then recompile EVERYTHING, quit then re-enter
 
 
 ## Notes
