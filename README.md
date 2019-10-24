@@ -1,5 +1,8 @@
 # 725_Assignment_2
 
+## About Project
+- This project aims to improve the implementation of a rudimentary baggage handling system (BMS). The main objective is to prevent the collision of bags using appropriate mutal exclusion algorithms. The algorithms used include central server, ring token and multicasting.
+
 ## Usage
 - Unzip the folder
 - Navigate into the folder labelled fbdk
@@ -21,3 +24,4 @@
 
 ## Known Bugs
 - Sometimes the system seems to skip ticks and places bags on the conveyor when it should not
+- If the system has been overloaded, conveyor 9 can somtimes stop moving bags while still running, this requires exit and entering fdbk again 
