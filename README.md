@@ -17,7 +17,7 @@
 - Do not add more then ~15 bags at once
 - Do not add bags to the system within 2 seconds of each other
 - If BaggageSystemCtl from src does not run
-    -move the BaggageSystemCTL.sys from the cs725 folder to src folder
+    - move the BaggageSystemCTL.sys from the cs725 folder to src folder
 
 ## Known Bugs
 - Sometimes the system seems to skip ticks and places bags on the conveyor when it should not
