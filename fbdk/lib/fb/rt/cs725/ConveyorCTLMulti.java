@@ -5,7 +5,7 @@ import fb.rt.*;
 import fb.rt.events.*;
 /** FUNCTION_BLOCK ConveyorCTLMulti
   * @author JHC
-  * @version 20191023/JHC
+  * @version 20191024/JHC
   */
 public class ConveyorCTLMulti extends FBInstance
 {
@@ -160,43 +160,54 @@ private void state_WANTED(){
   REQUEST_OUT.serviceEvent(this);
   CNF.serviceEvent(this);
 }
-private static final int index_HELD = 4;
-private void state_HELD(){
-  eccState = index_HELD;
-}
-private static final int index_NEW_BAG = 5;
+private static final int index_NEW_BAG = 4;
 private void state_NEW_BAG(){
   eccState = index_NEW_BAG;
   alg_NEWBAG_P();
 }
-private static final int index_NEW_REQUEST = 6;
+private static final int index_NEW_REQUEST = 5;
 private void state_NEW_REQUEST(){
   eccState = index_NEW_REQUEST;
   alg_NEWREQUEST_P();
 }
-private static final int index_NEW_REQUEST2 = 7;
-private void state_NEW_REQUEST2(){
-  eccState = index_NEW_REQUEST2;
-  alg_NEW_REQUEST2_P();
-}
-private static final int index_STOP2 = 8;
-private void state_STOP2(){
-  eccState = index_STOP2;
-  alg_STOP();
-  STOP.serviceEvent(this);
-}
-private static final int index_SEND2 = 9;
+private static final int index_SEND2 = 6;
 private void state_SEND2(){
   eccState = index_SEND2;
+  alg_SEND_P();
   REPLY_OUT.serviceEvent(this);
 state_WANTED();
 }
-private static final int index_HOLD = 10;
+private static final int index_STOP2 = 7;
+private void state_STOP2(){
+  eccState = index_STOP2;
+  alg_STOP_P();
+  alg_STOP();
+  STOP.serviceEvent(this);
+}
+private static final int index_HOLD = 8;
 private void state_HOLD(){
   eccState = index_HOLD;
-  alg_HOLD_P();
   alg_START();
   START.serviceEvent(this);
+  alg_HOLD_P();
+}
+private static final int index_STOP1 = 9;
+private void state_STOP1(){
+  eccState = index_STOP1;
+  alg_STOP_P();
+  alg_STOP();
+  STOP.serviceEvent(this);
+}
+private static final int index_SEND1 = 10;
+private void state_SEND1(){
+  eccState = index_SEND1;
+  alg_SEND1_P();
+  REPLY_OUT.serviceEvent(this);
+state_WANTED();
+}
+private static final int index_HELD = 11;
+private void state_HELD(){
+  eccState = index_HELD;
 }
 /** The default constructor. */
 public ConveyorCTLMulti(){
@@ -222,13 +233,13 @@ public ConveyorCTLMulti(){
   public void service_REQ(){
     if ((eccState == index_START) && (!PE.value)) state_WANTED();
     else if ((eccState == index_NEW_REQUEST) && (!PE14.value)) state_SEND();
-    else if ((eccState == index_NEW_REQUEST2) && (!PE.value)) state_STOP2();
     else if ((eccState == index_STOP2) && (!PE14.value)) state_SEND2();
-    else if ((eccState == index_NEW_BAG) && (!PE14.value)) state_WANTED();
+    else if ((eccState == index_STOP1) && (!PE14.value)) state_SEND1();
+    else if ((eccState == index_NEW_REQUEST) && (!PE.value)) state_STOP1();
     else if ((eccState == index_HOLD) && (PE.value)) state_HELD();
     else if ((eccState == index_NEW_BAG) && (!PE.value)) state_HELD();
     else if ((eccState == index_HELD) && (!PE14.value)) state_START();
-    else if ((eccState == index_NEW_REQUEST) && (!PE.value)) state_STOP2();
+    else if ((eccState == index_START) && (PE.value)) state_SEND();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
@@ -243,7 +254,7 @@ public ConveyorCTLMulti(){
 /** Services the REQUEST_IN event. */
   public void service_REQUEST_IN(){
     if ((eccState == index_START)) state_SEND();
-    else if ((eccState == index_NEW_BAG)) state_NEW_REQUEST2();
+    else if ((eccState == index_NEW_BAG)) state_STOP2();
     else if ((eccState == index_HELD)) state_NEW_REQUEST();
   }
   /** ALGORITHM INIT IN ST*/
@@ -290,6 +301,8 @@ MotoRotate.value=true;
 System.out.println(this+" Start "+MotoRotate.value);
 
 System.out.println("Start "+MotoRotate.value);
+
+System.out.println("ENTERING CRITICAL SECTION");
 }
   /** ALGORITHM STOP IN ST*/
 public void alg_STOP(){
