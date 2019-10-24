@@ -1,4 +1,4 @@
-# 725_assignment_2
+# 725_Assignment_2
 
 ## Usage
 - Unzip the folder
@@ -17,5 +17,5 @@
 - Do not add more then ~15 bags at once
 - Do not add bags to the system within 1.5 seconds of each other
 
-## Known bugs
+## Known Bugs
 - Sometimes the system seems to skip ticks and places bags on the conveyor when it should not
