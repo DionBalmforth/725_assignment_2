@@ -67,14 +67,14 @@
       <Connection Source="REQ" Destination="FC11.REQ" dx1="217.64705" />
       <Connection Source="FC12.INITO" Destination="INITO" dx1="2623.5293" />
       <Connection Source="FC12.CNF" Destination="CNF" dx1="2605.8823" />
-      <Connection Source="FC12.Request" Destination="Request" dx1="2605.8823" />
-      <Connection Source="FC12.Release" Destination="Release" dx1="2605.8823" />
+      <Connection Source="FC12.Request" Destination="Request" dx1="2664.7058" />
+      <Connection Source="FC12.Release" Destination="Release" dx1="2658.8235" />
       <Connection Source="REQ" Destination="FC12.REQ" dx1="1776.4706" />
       <Connection Source="STOP" Destination="FC12.CAS_STOP" dx1="1764.7058" />
       <Connection Source="START" Destination="FC12.CAS_START" dx1="1747.0588" />
       <Connection Source="Grant" Destination="FC12.Grant" dx1="1747.0588" />
       <Connection Source="FC12.STOP" Destination="FC11.CAS_STOP" dx1="100.0" dx2="100.0" dy="-447.0588" />
-      <Connection Source="FC12.START" Destination="FC11.CAS_START" dx1="129.41176" dx2="129.41176" dy="-605.8823" />
+      <Connection Source="FC12.START" Destination="FC11.CAS_START" dx1="188.23529" dx2="129.41176" dy="-652.94116" />
       <Connection Source="FC11.INITO" Destination="FC12.INIT" dx1="141.17647" />
     </EventConnections>
     <DataConnections>

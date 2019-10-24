@@ -3,11 +3,11 @@ package fb.rt.cs725;
 import fb.datatype.*;
 import fb.rt.*;
 import fb.rt.events.*;
-/** FUNCTION_BLOCK ConveyorCTL
+/** FUNCTION_BLOCK RingTokenCTL
   * @author JHC
   * @version 20191024/JHC
   */
-public class ConveyorCTL extends FBInstance
+public class RingTokenCTL extends FBInstance
 {
 /** Input event qualifier */
   public BOOL PE = new BOOL();
@@ -15,10 +15,16 @@ public class ConveyorCTL extends FBInstance
   public BOOL Block = new BOOL();
 /** VAR Candidate */
   public BOOL Candidate = new BOOL();
+/** VAR TokenInput */
+  public BOOL TokenInput = new BOOL();
+/** VAR PExit */
+  public BOOL PExit = new BOOL();
 /** Output event qualifier */
   public BOOL MotoRotate = new BOOL();
 /** VAR BlockCon */
   public BOOL BlockCon = new BOOL();
+/** VAR TokenOutput */
+  public BOOL TokenOutput = new BOOL();
 /** VAR lastPE */
   public BOOL lastPE = new BOOL();
 /** VAR lastBlock */
@@ -31,6 +37,8 @@ public class ConveyorCTL extends FBInstance
  public EventServer CAS_STOP = new EventInput(this);
 /** EVENT CAS_START */
  public EventServer CAS_START = new EventInput(this);
+/** EVENT TokenStatus_Input */
+ public EventServer TokenStatus_Input = new EventInput(this);
 /** Initialization Confirm */
  public EventOutput INITO = new EventOutput();
 /** Execution Confirmation */
@@ -39,6 +47,8 @@ public class ConveyorCTL extends FBInstance
  public EventOutput STOP = new EventOutput();
 /** EVENT START */
  public EventOutput START = new EventOutput();
+/** EVENT TokenStatus_Output */
+ public EventOutput TokenStatus_Output = new EventOutput();
 /** {@inheritDoc}
 * @param s {@inheritDoc}
 * @return {@inheritDoc}
@@ -48,6 +58,7 @@ public class ConveyorCTL extends FBInstance
     if("REQ".equals(s)) return REQ;
     if("CAS_STOP".equals(s)) return CAS_STOP;
     if("CAS_START".equals(s)) return CAS_START;
+    if("TokenStatus_Input".equals(s)) return TokenStatus_Input;
     return super.eiNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -58,6 +69,7 @@ public class ConveyorCTL extends FBInstance
     if("CNF".equals(s)) return CNF;
     if("STOP".equals(s)) return STOP;
     if("START".equals(s)) return START;
+    if("TokenStatus_Output".equals(s)) return TokenStatus_Output;
     return super.eoNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -68,6 +80,8 @@ public class ConveyorCTL extends FBInstance
     if("PE".equals(s)) return PE;
     if("Block".equals(s)) return Block;
     if("Candidate".equals(s)) return Candidate;
+    if("TokenInput".equals(s)) return TokenInput;
+    if("PExit".equals(s)) return PExit;
     return super.ivNamed(s);}
 /** {@inheritDoc}
 * @param s {@inheritDoc}
@@ -77,6 +91,7 @@ public class ConveyorCTL extends FBInstance
   public ANY ovNamed(String s) throws FBRManagementException{
     if("MotoRotate".equals(s)) return MotoRotate;
     if("BlockCon".equals(s)) return BlockCon;
+    if("TokenOutput".equals(s)) return TokenOutput;
     return super.ovNamed(s);}
 /** {@inheritDoc}
 * @param ivName {@inheritDoc}
@@ -87,6 +102,8 @@ public class ConveyorCTL extends FBInstance
     if("PE".equals(ivName)) connect_PE((BOOL)newIV);
     else if("Block".equals(ivName)) connect_Block((BOOL)newIV);
     else if("Candidate".equals(ivName)) connect_Candidate((BOOL)newIV);
+    else if("TokenInput".equals(ivName)) connect_TokenInput((BOOL)newIV);
+    else if("PExit".equals(ivName)) connect_PExit((BOOL)newIV);
     else super.connectIV(ivName, newIV);
     }
 /** Connect the given variable to the input variable PE
@@ -107,9 +124,26 @@ public class ConveyorCTL extends FBInstance
   public void connect_Candidate(BOOL newIV){
     Candidate = newIV;
     }
-private static final int index_START = 0;
-private void state_START(){
-  eccState = index_START;
+/** Connect the given variable to the input variable TokenInput
+  * @param newIV The variable to connect
+ */
+  public void connect_TokenInput(BOOL newIV){
+    TokenInput = newIV;
+    }
+/** Connect the given variable to the input variable PExit
+  * @param newIV The variable to connect
+ */
+  public void connect_PExit(BOOL newIV){
+    PExit = newIV;
+    }
+private static final int index_TOKENLESS = 0;
+private void state_TOKENLESS(){
+  eccState = index_TOKENLESS;
+  alg_TOKEN_FREE();
+  TokenStatus_Output.serviceEvent(this);
+  alg_START();
+  START.serviceEvent(this);
+  CNF.serviceEvent(this);
 }
 private static final int index_INIT = 1;
 private void state_INIT(){
@@ -117,33 +151,45 @@ private void state_INIT(){
   alg_INIT();
   INITO.serviceEvent(this);
   CNF.serviceEvent(this);
-state_START();
+state_TOKENLESS();
 }
-private static final int index_REQ = 2;
-private void state_REQ(){
-  eccState = index_REQ;
-  alg_REQ();
-  CNF.serviceEvent(this);
-state_START();
-}
-private static final int index_CAS_START = 3;
-private void state_CAS_START(){
-  eccState = index_CAS_START;
-  alg_START();
-  START.serviceEvent(this);
-  CNF.serviceEvent(this);
-state_START();
-}
-private static final int index_CAS_STOP = 4;
-private void state_CAS_STOP(){
-  eccState = index_CAS_STOP;
+private static final int index_WAIT = 2;
+private void state_WAIT(){
+  eccState = index_WAIT;
   alg_STOP();
   STOP.serviceEvent(this);
   CNF.serviceEvent(this);
-state_START();
+}
+private static final int index_TOKENFUL = 3;
+private void state_TOKENFUL(){
+  eccState = index_TOKENFUL;
+  alg_TOKEN_IN_USE();
+  TokenStatus_Output.serviceEvent(this);
+}
+private static final int index_CRITICAL_SECTION = 4;
+private void state_CRITICAL_SECTION(){
+  eccState = index_CRITICAL_SECTION;
+  alg_START();
+  START.serviceEvent(this);
+  CNF.serviceEvent(this);
+}
+private static final int index_DONE = 5;
+private void state_DONE(){
+  eccState = index_DONE;
+}
+private static final int index_DONE_STOP = 6;
+private void state_DONE_STOP(){
+  eccState = index_DONE_STOP;
+  alg_STOP();
+  STOP.serviceEvent(this);
+  CNF.serviceEvent(this);
+}
+private static final int index_DONE_EXIT_WAIT = 7;
+private void state_DONE_EXIT_WAIT(){
+  eccState = index_DONE_EXIT_WAIT;
 }
 /** The default constructor. */
-public ConveyorCTL(){
+public RingTokenCTL(){
     super();
     lastPE.initializeNoException("1");
     lastBlock.initializeNoException("0");
@@ -155,22 +201,33 @@ public ConveyorCTL(){
     else if (e == REQ) service_REQ();
     else if (e == CAS_STOP) service_CAS_STOP();
     else if (e == CAS_START) service_CAS_START();
+    else if (e == TokenStatus_Input) service_TokenStatus_Input();
   }
 /** Services the INIT event. */
   public void service_INIT(){
-    if ((eccState == index_START)) state_INIT();
+    if ((eccState == index_TOKENLESS)) state_INIT();
   }
 /** Services the REQ event. */
   public void service_REQ(){
-    if ((eccState == index_START) && (Candidate.value)) state_REQ();
+    if ((eccState == index_TOKENLESS) && (!PE.value)) state_WAIT();
+    else if ((eccState == index_TOKENFUL) && (!PE.value)) state_CRITICAL_SECTION();
+    else if ((eccState == index_TOKENFUL) && (PE.value)) state_TOKENLESS();
+    else if ((eccState == index_CRITICAL_SECTION) && (PE.value)) state_DONE();
+    else if ((eccState == index_DONE) && (!PE.value)) state_DONE_STOP();
+    else if ((eccState == index_DONE) && (!PExit.value)) state_DONE_EXIT_WAIT();
+    else if ((eccState == index_DONE_STOP) && (!PExit.value)) state_DONE_EXIT_WAIT();
+    else if ((eccState == index_DONE_EXIT_WAIT) && (PExit.value)) state_TOKENLESS();
   }
 /** Services the CAS_STOP event. */
   public void service_CAS_STOP(){
-    if ((eccState == index_START)) state_CAS_STOP();
   }
 /** Services the CAS_START event. */
   public void service_CAS_START(){
-    if ((eccState == index_START)) state_CAS_START();
+  }
+/** Services the TokenStatus_Input event. */
+  public void service_TokenStatus_Input(){
+    if ((eccState == index_WAIT) && (TokenInput.value)) state_CRITICAL_SECTION();
+    else if ((eccState == index_TOKENLESS) && (TokenInput.value)) state_TOKENFUL();
   }
   /** ALGORITHM INIT IN ST*/
 public void alg_INIT(){
@@ -182,6 +239,33 @@ System.out.println(MotoRotate.value);
 }
   /** ALGORITHM REQ IN ST*/
 public void alg_REQ(){
+System.out.println(this+" -> Candidate"+Candidate.value);
+if(Candidate.value){
+if(lastPE.value!=PE.value){
+if(!PE.value){
+BlockCon.value=true;
+System.out.println("BlockCon = true");
+}
+else{
+BlockCon.value=false;
+System.out.println("BlockCon = false");
+}
+lastPE.value=PE.value;
+}
+if(lastBlock.value!=Block.value){
+if(Block.value){
+STOP.serviceEvent(this);
+MotoRotate.value=false;
+System.out.println("Cas Stop");
+}
+else{
+START.serviceEvent(this);
+MotoRotate.value=true;
+System.out.println("Cas Start");
+}
+lastBlock.value=Block.value;
+}
+}
 }
   /** ALGORITHM START IN ST*/
 public void alg_START(){
@@ -196,5 +280,13 @@ MotoRotate.value=false;
 System.out.println(this+" Stop "+MotoRotate.value);
 
 System.out.println("Stop "+MotoRotate.value);
+}
+  /** ALGORITHM TOKEN_IN_USE IN ST*/
+public void alg_TOKEN_IN_USE(){
+TokenOutput.value=false;
+}
+  /** ALGORITHM TOKEN_FREE IN ST*/
+public void alg_TOKEN_FREE(){
+TokenOutput.value=true;
 }
 }
